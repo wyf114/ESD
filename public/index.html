@@ -78,24 +78,30 @@
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="inputOrigin">Departing From</label>
                                         <input name="origin" type="text" class="form-control" id="inputOrigin"
-                                            placeholder="Type your origin...">
+                                            placeholder="Type your origin..." required>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="inputDest">Choose Your Destination</label>
                                         <input name="destination" type="text" class="form-control" id="inputDest"
-                                            placeholder="Type your destination...">
+                                            placeholder="Type your destination..." required>
                                     </div>
                                 </div> <!-- form-row -->
                                 <div class="form-row tm-search-form-row">
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
                                         <label for="inputDeparture">Departure Date</label>
-                                        <input name="departure-date" type="text" class="form-control" id="inputDeparture"
-                                            placeholder="Departure Date">
+                                        <input name="departure-date" type="date" class="form-control" id="inputDeparture"
+                                            placeholder="Departure Date" 
+                                            min="2022-01-01" onfocus="this.min=new Date().toISOString().split('T')[0]" 
+                                            max="2023-04-01" onfocus="this.max=new Date().toISOString().split('T')[0]" 
+                                        required>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
                                         <label for="inputReturn">Return Date</label>
-                                        <input name="return-date" type="text" class="form-control" id="inputReturn"
-                                            placeholder="Return Date">
+                                        <input name="return-date" type="date" class="form-control" id="inputReturn"
+                                            placeholder="Return Date"
+                                            min="2022-01-01" onfocus="this.min=new Date().toISOString().split('T')[0]" 
+                                            max="2023-04-01" onfocus="this.max=new Date().toISOString().split('T')[0]" 
+                                        required>
                                     </div>
 
                                     <div class="form-group tm-form-group tm-form-group-1">
@@ -139,9 +145,9 @@
 
                                         <label for="inputClass">Class</label>
                                         <select name="class" class="form-control tm-select" id="inputClass">
-                                            <option value="0" selected>Economy</option>
-                                            <option value="1">Business</option>
-                                            <option value="2">First</option>
+                                            <option value="Y" selected>Economy</option>
+                                            <option value="J">Business</option>
+                                            <option value="F">First</option>
                                         </select>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
