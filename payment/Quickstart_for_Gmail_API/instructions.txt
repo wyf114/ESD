@@ -1,0 +1,31 @@
+command to install google client libary: 
+
+STEP 1: pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+STEP 2: python quickstart.py (copy pasted code from website)
+
+STEP 3: ModuleNotFoundError: No module named 'google.auth'
+solution --> ??
+
+try: 
+pip install -r requirements.txt  
+
+
+(will continue looking into this)
+
+
+
+
+GMAIL API:
+
+sending email 
+https://developers.google.com/gmail/api/guides/sending 
+
+
+
+idea: automate paypal and gmail e.g sending mail after successful paypal transaction
+https://automate.io/integration/gmail/paypal 
+
+
+
+
