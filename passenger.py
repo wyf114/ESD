@@ -58,9 +58,66 @@ def get_all():
     return jsonify(
         {
             "code": 404,
-            "message": "There are no passengers."
+            "message": "Oops. No passenger found."
         }
     ),404
+
+# get passengers by passport
+@app.route("/passenger/<string:passport>")
+def find_by_passport(passport):
+    passenger = Passenger.query.filter_by(passport=passport).first()
+    if passenger:
+        return jsonify(
+            {
+                "code": 200,
+                "data": passenger.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Passenger not found."
+        }
+    ), 404
+
+# create new passenger
+@app.route("/passenger/<string:passport>", methods=['POST'])
+def create_passenger(passport):
+    if Passenger.query.filter_by(passport=passport).first():
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "passport": passport
+                },
+                "message": "Passenger already exists."
+            }
+        ), 400
+
+    data = request.get_json(force=True)
+    print("data is " + format(data))
+    passenger = Passenger(passport, **data)
+
+    try:
+        db.session.add(passenger)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "passport": passport
+                },
+                "message": "An error occurred creating the passenger."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": passenger.json()
+        }
+    ), 201
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
