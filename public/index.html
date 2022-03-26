@@ -78,7 +78,7 @@
                         </div> <!-- row -->
                         <div class="row tm-banner-row" id="tm-section-search">
 
-                            <form action="index.html" method="get" class="tm-search-form tm-section-pad-2">
+                            <form class="tm-search-form tm-section-pad-2">
                                 <div class="form-row tm-search-form-row">
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="inputOrigin">Departing From</label>
@@ -157,7 +157,7 @@
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="btnSubmit">&nbsp;</label>
-                                        <a type="submit" href='./booking.html'
+                                        <a type="submit" onclick="processForm()"
                                             class="btn btn-primary tm-btn tm-btn-search text-uppercase"
                                             id="btnSubmit">Check Availability</a>
                                     </div>
@@ -196,6 +196,8 @@
     </div> <!-- .main-content -->
 
     <!-- load JS files -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/formprocess.js"></script>
     <script src="js/jquery-1.11.3.min.js"></script> <!-- jQuery (https://jquery.com/download/) -->
     <script src="js/popper.min.js"></script> <!-- https://popper.js.org/ -->
     <script src="js/bootstrap.min.js"></script> <!-- https://getbootstrap.com/ -->
