@@ -20,7 +20,7 @@
 
 </head>
 
-<body>
+<body onload="loadResultsPage()">
     <div class="tm-main-content" id="top">
         <div class="tm-top-bar-bg"></div>
         <div class="tm-top-bar" id="tm-top-bar">
@@ -66,54 +66,8 @@
                 <!-- results -->
                 <div class="tab-pane">
 
-                    <div class="search-results-wrap">
-                        <div class="search-results">
-                            
-                            <div class="tm-recommended-description-box">
-                                <h3 class="tm-recommended-title">AR315</h3>
-                                <p class="tm-text-highlight">08:15 - 12:35</br>Singapore to london</p>
-                                <p class="tm-text-gray">18 Mar (Fri)</br>
-                                    Changi
-                                    Terminal 3</p>
-                            </div>
-                            <a href="./bookingform.html" class="tm-recommended-price-box">
-                                <p class="tm-recommended-price">$770</p>
-                                <p class="tm-recommended-price-link">Book</p>
-                            </a>
-                        </div>
-
-                        <div class="search-results">
-                            
-                            <div class="tm-recommended-description-box">
-                                <h3 class="tm-recommended-title">AR425</h3>
-                                <p class="tm-text-highlight">10:35 - 14:55</br>Singapore to london</p>
-                                <p class="tm-text-gray">18 Mar (Fri)</br>
-                                    Changi
-                                    Terminal 3</p>
-                            </div>
-                            <a href="./bookingform.html" class="tm-recommended-price-box">
-                                <p class="tm-recommended-price">$230</p>
-                                <p class="tm-recommended-price-link" >Book</p>
-                            </a>
-                        </div>
-
-                        <div class="search-results">
-                            
-                            <div class="tm-recommended-description-box">
-                                <h3 class="tm-recommended-title">TB315</h3>
-                                <p class="tm-text-highlight">14:15 - 18:35</br>Singapore to london</p>
-                                <p class="tm-text-gray">18 Mar (Fri)</br>
-                                    Changi
-                                    Terminal 3</p>
-                            </div>
-                            <a href="./bookingform.html" class="tm-recommended-price-box">
-                                <p class="tm-recommended-price">$140</p>
-                                <p class="tm-recommended-price-link">Book</p>
-                            </a>
-                        </div>
-
-                        <div class="search-results">
-                            
+                    <div class="search-results-wrap" id="searchResultsHere">
+                        <!-- <div class="search-results">                            
                             <div class="tm-recommended-description-box">
                                 <h3 class="tm-recommended-title">JY315</h3>
                                 <p class="tm-text-highlight">19:05 - 123:25</br>Singapore to london</p>
@@ -125,7 +79,8 @@
                                 <p class="tm-recommended-price">$190</p>
                                 <p class="tm-recommended-price-link">Book</p>
                             </a>
-                        </div>
+                        </div> -->
+
                     </div>
 
                     <a href="#" class="text-uppercase btn-primary tm-btn mx-auto tm-d-table">Go to the top</a>
@@ -142,6 +97,8 @@
     </div> <!-- .main-content -->
 
     <!-- load JS files -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/formprocess.js"></script>
     <script src="js/jquery-1.11.3.min.js"></script> <!-- jQuery (https://jquery.com/download/) -->
     <script src="js/popper.min.js"></script> <!-- https://popper.js.org/ -->
     <script src="js/bootstrap.min.js"></script> <!-- https://getbootstrap.com/ -->
