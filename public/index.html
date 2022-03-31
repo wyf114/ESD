@@ -83,12 +83,14 @@
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="inputOrigin">Departing From</label>
                                         <input name="origin" type="text" class="form-control" id="inputOrigin"
-                                            placeholder="Type your origin..." required>
+                                            placeholder="Type your origin..." onkeyup="showAirport1()" required>
+                                            <div id="match-list1"></div>
                                     </div>
                                     <div class="form-group tm-form-group tm-form-group-pad tm-form-group-1">
                                         <label for="inputDest">Choose Your Destination</label>
                                         <input name="destination" type="text" class="form-control" id="inputDest"
-                                            placeholder="Type your destination..." required>
+                                            placeholder="Type your destination..." onkeyup="showAirport2()"required>
+                                            <div id="match-list2"></div>
                                     </div>
                                 </div> <!-- form-row -->
                                 <div class="form-row tm-search-form-row">
@@ -198,6 +200,7 @@
     <!-- load JS files -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/formprocess.js"></script>
+    <script src="js/showCode.js"></script>
     <script src="js/jquery-1.11.3.min.js"></script> <!-- jQuery (https://jquery.com/download/) -->
     <script src="js/popper.min.js"></script> <!-- https://popper.js.org/ -->
     <script src="js/bootstrap.min.js"></script> <!-- https://getbootstrap.com/ -->
