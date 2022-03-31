@@ -6,33 +6,74 @@ function loadResultsPage() {
     let url = `http://localhost:8090/search/${jsonStr}`
     axios.get(url)
     .then(response => {
-        var items = response.data.response.flights
+        var items = response.data.response
         var pageStr = ""
         var counter = 0
+        var returnStr = ""
+        var returnCount = 0
+        var price = items.recommendations[0].fareSummary.fareTotal.totalAmount
 
-        for (let seg of items[0].segments) {
+        for (let ret of items.flights[1].segments) {
+            returnCount++
+
+            var nextDay = ""
+            if (ret.departureDateTime.slice(0,10) != ret.arrivalDateTime.slice(0,10)) {
+                nextDay = " (next day)"
+            }
+
+            returnStr += `
+            <div class="search-results">
+
+                <div class="tm-recommended-description-box">
+                    <h3 class="tm-recommended-title">${ret.legs[0].operatingAirline.code}${ret.legs[0].flightNumber}</h3>
+                    <p class="tm-text-highlight">${ret.departureDateTime.slice(10,16)} - ${ret.arrivalDateTime.slice(10,16)}${nextDay}</br>
+                    ${ret.originAirportCode} to ${ret.destinationAirportCode}</p>
+                    <p class="tm-text-gray">${ret.departureDateTime.slice(0,10)}</br>
+                </div>
+                <a href="./bookingform.html" class="tm-recommended-price-box">
+                    <p class="tm-recommended-price">${price}</p>
+                    <p class="tm-recommended-price-link">Book</p>
+                </a>
+            </div>
+            `
+
+            if (returnCount == 10) {
+                break
+            }
+        }
+
+        for (let seg of items.flights[0].segments) {
             counter++
 
             var nextDay = ""
             if (seg.departureDateTime.slice(0,10) != seg.arrivalDateTime.slice(0,10)) {
                 nextDay = " (next day)"
             }
+
+            var collapsed = "true"
+            if (counter > 1) {
+                collapsed = "false"
+            }
             
             pageStr += `
-            <div class="search-results">
-                <div class="tm-recommended-description-box">
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading${counter}">
+                <button class="accordion-button tm-recommended-description-box" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${counter}" aria-expanded="${collapsed}" aria-controls="collapse${counter}">
                     <h3 class="tm-recommended-title">${seg.legs[0].operatingAirline.code}${seg.legs[0].flightNumber}</h3>
                     <p class="tm-text-highlight">${seg.departureDateTime.slice(10,16)} - ${seg.arrivalDateTime.slice(10,16)}${nextDay}</br>
                     ${seg.originAirportCode} to ${seg.destinationAirportCode}</p>
                     <p class="tm-text-gray">${seg.departureDateTime.slice(0,10)}</br>
                     Changi Airport Terminal ${seg.legs[0].departureTerminal}</p>
+                </button>
+                </h2>
+                <div id="collapse${counter}" class="accordion-collapse collapse show" aria-labelledby="heading${counter}" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        ${returnStr}
+                    </div>
                 </div>
-                <a href="./bookingform.html" class="tm-recommended-price-box">
-                    <p class="tm-recommended-price">$190</p>
-                    <p class="tm-recommended-price-link">Book</p>
-                </a>
-            </div>
-            `
+            </div>`
+
             if (counter == 10) {
                 break
             }
