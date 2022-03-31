@@ -3,8 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS
 import sys
+from os import environ
+
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # check os and change sql setting respectively
 my_os=sys.platform
@@ -148,4 +152,4 @@ def create_booking(passport):
     ), 201
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

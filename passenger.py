@@ -1,8 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import sys
+from os import environ
+
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # check os and change sql setting respectively
 my_os=sys.platform
@@ -120,6 +125,10 @@ def create_passenger(passport):
     ), 201
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    # host=’0.0.0.0’ allows the service to be accessible from any other in the network 
+    # and not only from your own computer
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
+
+# export dbURL=mysql+mysqlconnector://root:root@localhost:3306/passenger
 
