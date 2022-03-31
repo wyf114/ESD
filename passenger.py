@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
 # check os and change sql setting respectively
 my_os=sys.platform
 if my_os == "darwin":
@@ -22,7 +21,7 @@ db = SQLAlchemy(app)
 
 # passenger table setup
 class Passenger(db.Model):
-    __tablename__ = 'passenger'
+    __tablename__ = 'passenger'  
     passport = db.Column(db.String(50), nullable=False, primary_key=True)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
