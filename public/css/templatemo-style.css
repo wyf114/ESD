@@ -108,7 +108,9 @@ p:last-child { margin-bottom: 0; }
     border-radius: 0;
     cursor: pointer;
 }
-
+.tm-banner{
+    height:1200px;
+}
 .tm-banner-title {
     font-size: 3rem;
     margin-bottom: 10px;
@@ -131,8 +133,8 @@ p:last-child { margin-bottom: 0; }
     background: rgba(0, 0, 0, 0.7);
 }
 .tm-banner-bg {
-    background: url(../img/banner.jpg) center top no-repeat;    
-    min-height: 720px;
+    background: url(../img/banner.jpg) center top no-repeat;   
+    height:100%; 
     position: relative;
 }
 .tm-banner-row { 
@@ -179,7 +181,17 @@ label { font-weight: 700; }
 .tm-form-group-2 { width: 50%; }
 .tm-form-group-3 { width: 25%; }
 .form-control { border-radius: 0; }
-
+#match-list1{
+    position: relative;
+    z-index: 5;
+}
+#match-list2{
+    position: relative;
+    z-index: 5;
+}
+.eachMatch{
+    padding:0.5rem;
+}
 .tm-btn {
     cursor: pointer;
     display: inline-block;
