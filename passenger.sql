@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `passenger` (
 `nationality` varchar(100) NOT NULL,
 `email` varchar(50) NOT NULL,
 `phone` varchar(20) NOT NULL,
-PRIMARY KEY (`passport`)
+PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `passenger` (`passport`, `lastname`, `firstname`, `dob`, `gender`,`nationality`,`email`,`phone`) VALUES

@@ -57,40 +57,91 @@ def processMakeBooking(booking):
     # Get the booking info {booking ID}
     # Invoke the passenger microservice
     print('\n-----Invoking passenger microservice-----')
+    print(booking)
 
+    # assume the user has logged in and has filled up his info
+    # invoke passenger microservice to get the passenger info by email
+    email = booking["email"]
+    get_passenger = invoke_http(passenger_URL + "/" + email, method='GET')
+    print('result:', get_passenger)
 
-    # invoke book microservice to create a book
-    # convert = json.loads(booking)[0]
-    # passport = convert["passport"]
-    create_booking = invoke_http(passenger_URL, method='POST', json=booking)
-    print('result:', create_booking)
-
-        # 4. Record new order
     # record the activity log anyway
     print('\n\n-----Invoking activity_log microservice-----')
-    invoke_http(activity_log_URL, method="POST", json=create_booking)
-    print("\nOrder sent to activity log.\n")
+    invoke_http(activity_log_URL, method="POST", json=get_passenger)
+    print("\nget_passenger sent to activity log.\n")
     # - reply from the invocation is not used;
     # continue even if this invocation fails
 
-    # Check the order result; if a failure, send it to the error microservice.
+    # Check the get_passenger result; if a failure, send it to the error microservice.
+    code = get_passenger["code"]
+    if code not in range(200, 300):
+
+        # Inform the error microservice
+        print('\n\n-----Invoking error microservice as get_passenger fails-----')
+        invoke_http(error_URL, method="POST", json=get_passenger)
+        # - reply from the invocation is not used; 
+        # continue even if this invocation fails
+        print("get_passenger status ({:d}) sent to the error microservice:".format(
+            code), get_passenger)
+
+        # 7. Return error
+        return {
+            "code": 500,
+            "data": {"get_passenger_result": get_passenger},
+            "message": "get_passenger failure sent for error handling."
+        }
+    
+    print('\n-----Invoking booking microservice-----')
+
+    # assume gotten flight info from UI
+    # add passenger + flight info into booking db
+    flight_info = {"flightNumber":'MF1314', "departureDate": '2022-05-20',
+    "departureCity": 'Singapore', "arrivalCity": 'Beijing', "flightClass": 'Business', 
+    "baggage": '20kg', "price": '500.00', "bookingStatus": 'Pending'}
+    passenger_info = get_passenger["data"]
+    booking_info = {**passenger_info, **flight_info}
+    print(booking_info)
+    passport = booking_info["passport"]
+    flightNumber = booking_info["flightNumber"]
+    bookingId = passport+flightNumber
+    create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking_info)
+
+    print('result:', create_booking)
+
+    # record the activity log anyway
+    print('\n\n-----Invoking activity_log microservice-----')
+    invoke_http(activity_log_URL, method="POST", json=create_booking)
+    print("\nBooking sent to activity log.\n")
+    # - reply from the invocation is not used;
+    # continue even if this invocation fails
+
+    # Check the booking result; if a failure, send it to the error microservice.
     code = create_booking["code"]
     if code not in range(200, 300):
 
         # Inform the error microservice
-        print('\n\n-----Invoking error microservice as order fails-----')
+        print('\n\n-----Invoking error microservice as booking fails-----')
         invoke_http(error_URL, method="POST", json=create_booking)
         # - reply from the invocation is not used; 
         # continue even if this invocation fails
-        print("Order status ({:d}) sent to the error microservice:".format(
+        print("Booking status ({:d}) sent to the error microservice:".format(
             code), create_booking)
 
         # 7. Return error
         return {
             "code": 500,
-            "data": {"order_result": create_booking},
-            "message": "Order creation failure sent for error handling."
+            "data": {"booking_result": create_booking},
+            "message": "Booking creation failure sent for error handling."
         }
+
+        # 7. Return created booking record
+    return {
+        "code": 201,
+        "data": {
+            # "get_passenger_result": get_passenger,
+            "booking_result": create_booking
+        }
+    }
 
 
     # validation part, check if the database have sufficient slots

@@ -28,7 +28,8 @@ CORS(app)
 # booking table setup
 class Booking(db.Model):
     __tablename__ = 'booking'
-    passport = db.Column(db.String(50), nullable=False, primary_key=True)
+    bookingId = db.Column(db.String(100), nullable=False, primary_key=True)
+    passport = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.String(20), nullable=False)
@@ -46,8 +47,9 @@ class Booking(db.Model):
     price = db.Column(db.Float, nullable=False) 
     bookingStatus = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, passport, lastname, firstname, dob, gender, nationality, email, phone, 
+    def __init__(self, bookingId, passport, lastname, firstname, dob, gender, nationality, email, phone, 
     flightNumber, departureDate, departureCity, arrivalCity, flightClass, baggage, price, bookingStatus):
+        self.bookingId = bookingId
         self.passport = passport
         self.lastname = lastname
         self.firstname = firstname
@@ -67,12 +69,12 @@ class Booking(db.Model):
         self.bookingStatus = bookingStatus
 
     def json(self):
-        return {"passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
+        return {"bookingId": self.bookingId, "passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
         "dob": self.dob, "gender": self.gender, "nationality": self.nationality, 
         "email": self.email, "phone": self.phone, "flightNumber":self.flightNumber, "departureDate": self.departureDate,
         # "departureTime": self.departureTime, 
-        "departureCity": self.departureCity, "arrivalCity": self.arrivalCity,
-        "flightClass": self.flightClass, "baggage": self.baggage, "price": self.price, "bookingStatus": self.bookingStatus}
+        "departureCity": self.departureCity, "arrivalCity": self.arrivalCity, "flightClass": self.flightClass, 
+        "baggage": self.baggage, "price": self.price, "bookingStatus": self.bookingStatus}
 
 # get all bookings from db
 @app.route("/booking")
@@ -94,10 +96,10 @@ def get_all():
         }
     ),404
 
-# get bookings by passport
-@app.route("/booking/<string:passport>")
-def find_by_passport(passport):
-    booking = Booking.query.filter_by(passport=passport).first()
+# get bookings by bookingId
+@app.route("/booking/<string:bookingId>")
+def find_by_bookingId(bookingId):
+    booking = Booking.query.filter_by(bookingId=bookingId).first()
     if booking:
         return jsonify(
             {
@@ -113,14 +115,14 @@ def find_by_passport(passport):
     ), 404
 
 # create new booking
-@app.route("/booking/<string:passport>", methods=['POST'])
-def create_booking(passport):
-    if Booking.query.filter_by(passport=passport).first():
+@app.route("/booking/<string:bookingId>", methods=['POST'])
+def create_booking(bookingId):
+    if Booking.query.filter_by(bookingId=bookingId).first():
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "passport": passport
+                    "bookingId": bookingId
                 },
                 "message": "Booking already exists."
             }
@@ -128,7 +130,7 @@ def create_booking(passport):
 
     data = request.get_json(force=True)
     print("data is " + format(data))
-    booking = Booking(passport, **data)
+    booking = Booking(bookingId, **data)
 
     try:
         db.session.add(booking)
@@ -138,7 +140,7 @@ def create_booking(passport):
             {
                 "code": 500,
                 "data": {
-                    "passport": passport
+                    "bookingId": bookingId
                 },
                 "message": "An error occurred creating the booking."
             }

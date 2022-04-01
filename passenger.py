@@ -22,13 +22,13 @@ db = SQLAlchemy(app)
 # passenger table setup
 class Passenger(db.Model):
     __tablename__ = 'passenger'  
-    passport = db.Column(db.String(50), nullable=False, primary_key=True)
+    passport = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.String(20), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     nationality = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False, primary_key=True)
     phone = db.Column(db.String(50), nullable=False)
 
     def __init__(self, passport, lastname, firstname, dob, gender, nationality, email, phone):
@@ -66,10 +66,10 @@ def get_all():
         }
     ),404
 
-# get passengers by passport
-@app.route("/passenger/<string:passport>")
-def find_by_passport(passport):
-    passenger = Passenger.query.filter_by(passport=passport).first()
+# get passengers by email
+@app.route("/passenger/<string:email>")
+def find_by_email(email):
+    passenger = Passenger.query.filter_by(email=email).first()
     if passenger:
         return jsonify(
             {

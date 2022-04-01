@@ -20,13 +20,17 @@ flightClass varchar(50) NOT NULL,
 baggage varchar(50) NOT NULL,
 price Float NOT NULL,
 bookingStatus varchar(50) NOT NULL,
+bookingId varchar(100) NOT NULL,
 
-PRIMARY KEY (`passport`)
+PRIMARY KEY (`bookingId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `booking` (`passport`, `lastname`, `firstname`, `dob`, `gender`,`nationality`,`email`,`phone`,
-`flightNumber`, `departureDate`, `departureCity`, `arrivalCity`, `flightClass`, `baggage`, `price`, `bookingStatus`) VALUES
+`flightNumber`, `departureDate`, `departureCity`, `arrivalCity`, `flightClass`, `baggage`, `price`, `bookingStatus`, `bookingId`) VALUES
 ('Y12345678', 'Yifan', 'Wei', '02/10/1984', 'Female','Chinese','wyf102@gmail.com','+6512345678',
-'MF5045', '2022-10-02', 'Singapore', 'Beijing', 'Business', '20kg', '500.00', 'Pending');
+'MF5045', '2022-10-02', 'Singapore', 'Beijing', 'Business', '20kg', '500.00', 'Pending', 'MF5045Y12345678'),
+('Y12345678', 'Yifan', 'Wei', '02/10/1984', 'Female','Chinese','wyf102@gmail.com','+6512345678',
+'MF5976', '2022-10-03', 'Singapore', 'Beijing', 'Business', '20kg', '500.00', 'Pending', 'MF5976Y12345678');
+
 -- ('L12353567', 'Leonardo', 'Da Vinci', '15/04/1452', 'Male', 'Italian', 'ldv0415@gmail.com', '+658765432');
 COMMIT;
