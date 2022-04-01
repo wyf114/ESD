@@ -28,11 +28,21 @@ def make_booking():
             booking = request.get_json(force=True)
             print("\nReceived a booking in JSON:", booking)
 
-            # Get booking info {booking ID}
-            result = processMakeBooking(booking)
-            print('\n------------------------')
-            print('\nresult: ', result)
-            return jsonify(result), result["code"]
+            # check login status
+            login_status = True
+
+            # if logged in
+            if login_status:
+                # Get booking info {booking ID}
+                result = processMemberBooking(booking)
+                print('\n------------------------')
+                print('\nresult: ', result)
+                return jsonify(result), result["code"]
+            else:
+                result = processGuestBooking()
+                print('\n------------------------')
+                print('\nresult: ', result)
+                return jsonify(result), result["code"]
 
         except Exception as e:
             # Unexpected error
@@ -53,12 +63,12 @@ def make_booking():
 
 
 
-def processMakeBooking(booking):
+def processMemberBooking(booking):
     # Get the booking info {booking ID}
     # Invoke the passenger microservice
     print('\n-----Invoking passenger microservice-----')
     print(booking)
-
+        
     # assume the user has logged in and has filled up his info
     # invoke passenger microservice to get the passenger info by email
     email = booking["email"]
@@ -75,6 +85,65 @@ def processMakeBooking(booking):
     # Check the get_passenger result; if a failure, send it to the error microservice.
     code = get_passenger["code"]
     if code not in range(200, 300):
+
+        # if no data found in the passenger db, 
+        # manual create booking info, and save passenger data into db
+        if code == 404:
+            # this part is gotten from UI form
+            first_time_booking_user = {"passport": "W36545625", "lastname": "wang", "firstname": "faye", 
+                "dob": "08/08/1969", "gender": "Female", "nationality": "Chinese", "phone": "+8618473649205"}
+            first_time_booking_flight = {"flightNumber":'MF8765', "departureDate": '2022-05-20',
+                "departureCity": 'Singapore', "arrivalCity": 'Beijing', "flightClass": 'Business', 
+                "baggage": '20kg', "price": '500.00', "bookingStatus": 'Pending'}
+
+
+            first_time_booking = {**first_time_booking_user, **first_time_booking_flight}
+            first_time_booking["email"] = booking["email"]
+            passport = first_time_booking["passport"]
+            flightNumber = first_time_booking["flightNumber"]
+            bookingId = passport+flightNumber
+
+            create_user = invoke_http(passenger_URL + "/" + booking["email"], method='POST', json=first_time_booking_user)
+            create_first_time_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=first_time_booking)
+
+                # record the activity log anyway
+            print('\n\n-----Invoking activity_log microservice-----')
+            invoke_http(activity_log_URL, method="POST", json=create_first_time_booking)
+            invoke_http(activity_log_URL, method="POST", json=create_user)
+
+            print("\nBooking sent to activity log.\n")
+            # - reply from the invocation is not used;
+            # continue even if this invocation fails
+        
+            # Check the booking result; if a failure, send it to the error microservice.
+            code = create_first_time_booking["code"]
+            if code not in range(200, 300):
+            
+                # Inform the error microservice
+                print('\n\n-----Invoking error microservice as booking fails-----')
+                invoke_http(error_URL, method="POST", json=create_first_time_booking)
+                invoke_http(error_URL, method="POST", json=create_user)
+                # - reply from the invocation is not used; 
+                # continue even if this invocation fails
+                print("Booking status ({:d}) sent to the error microservice:".format(
+                    code), create_first_time_booking)
+        
+                # 7. Return error
+                return {
+                    "code": 500,
+                    "data": {"booking_result": create_first_time_booking, "passenger_creation": create_user},
+                    "message": "Booking creation failure sent for error handling."
+                }
+        
+                # 7. Return created booking record
+            return {
+                "code": 201,
+                "data": {
+                    # "get_passenger_result": get_passenger,
+                    "booking_result": create_first_time_booking, 
+                    "passenger_creation": create_user
+                }
+            }
 
         # Inform the error microservice
         print('\n\n-----Invoking error microservice as get_passenger fails-----')
@@ -100,13 +169,13 @@ def processMakeBooking(booking):
     "baggage": '20kg', "price": '500.00', "bookingStatus": 'Pending'}
     passenger_info = get_passenger["data"]
     booking_info = {**passenger_info, **flight_info}
-    print(booking_info)
+    print('Booking summary:', booking_info)
     passport = booking_info["passport"]
     flightNumber = booking_info["flightNumber"]
     bookingId = passport+flightNumber
     create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking_info)
 
-    print('result:', create_booking)
+    # print('result:', create_booking)
 
     # record the activity log anyway
     print('\n\n-----Invoking activity_log microservice-----')
@@ -144,11 +213,17 @@ def processMakeBooking(booking):
     }
 
 
-    # validation part, check if the database have sufficient slots
-    # 
-    # 
-    # 
-    # to be done
+def processGuestBooking():
+    return "ask them to login first"
+
+
+
+
+# validation part, check if the database have sufficient slots
+# 
+# 
+# 
+# to be done
 
 
 

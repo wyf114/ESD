@@ -22,29 +22,28 @@ db = SQLAlchemy(app)
 # passenger table setup
 class Passenger(db.Model):
     __tablename__ = 'passenger'  
+    email = db.Column(db.String(50), nullable=False, primary_key=True)
     passport = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
     dob = db.Column(db.String(20), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     nationality = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(50), nullable=False, primary_key=True)
     phone = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, passport, lastname, firstname, dob, gender, nationality, email, phone):
+    def __init__(self, email, passport, lastname, firstname, dob, gender, nationality, phone):
+        self.email = email
         self.passport = passport
         self.lastname = lastname
         self.firstname = firstname
         self.dob = dob
         self.gender = gender
         self.nationality = nationality
-        self.email = email
         self.phone = phone
 
     def json(self):
-        return {"passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
-        "dob": self.dob, "gender": self.gender, "nationality": self.nationality, 
-        "email": self.email, "phone": self.phone}
+        return {"email": self.email, "passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
+        "dob": self.dob, "gender": self.gender, "nationality": self.nationality, "phone": self.phone}
 
 # get all passengers from db
 @app.route("/passenger")
@@ -85,14 +84,14 @@ def find_by_email(email):
     ), 404
 
 # create new passenger
-@app.route("/passenger/<string:passport>", methods=['POST'])
-def create_passenger(passport):
-    if Passenger.query.filter_by(passport=passport).first():
+@app.route("/passenger/<string:email>", methods=['POST'])
+def create_passenger(email):
+    if Passenger.query.filter_by(email=email).first():
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "passport": passport
+                    "email": email
                 },
                 "message": "Passenger already exists."
             }
@@ -100,7 +99,7 @@ def create_passenger(passport):
 
     data = request.get_json(force=True)
     print("data is " + format(data))
-    passenger = Passenger(passport, **data)
+    passenger = Passenger(email, **data)
 
     try:
         db.session.add(passenger)
@@ -110,7 +109,7 @@ def create_passenger(passport):
             {
                 "code": 500,
                 "data": {
-                    "passport": passport
+                    "email": email
                 },
                 "message": "An error occurred creating the passenger."
             }
