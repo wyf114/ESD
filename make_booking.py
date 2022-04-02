@@ -4,18 +4,22 @@ import os, sys
 import requests
 from invokes import invoke_http
 import json
+from os import environ
+import amqp_setup_email
+import pika
+import json
 
-# import amqp_setup
-# import pika
-# import json
 
 app = Flask(__name__)
 CORS(app)
 
-passenger_URL = "http://localhost:5000/passenger"
-booking_URL = "http://localhost:5001/booking"
-activity_log_URL = "http://localhost:5003/activity_log"
-error_URL = "http://localhost:5004/error"
+booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
+passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
+activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"
+error_URL = environ.get('error_URL') or "http://localhost:5004/error"
+# passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
+
+
 
 # email_URL = 
 #validation_URL = 
@@ -25,6 +29,7 @@ error_URL = "http://localhost:5004/error"
 def make_booking():
     if request.is_json:
         try:
+            # booking is a list of flight info + passenger info
             booking = request.get_json(force=True)
             print("\nReceived a booking in JSON:", booking)
 
@@ -62,170 +67,50 @@ def make_booking():
     }), 400
 
 
-
 def processMemberBooking(booking):
-    # Get the booking info {booking ID}
-    # Invoke the passenger microservice
-    print('\n-----Invoking passenger microservice-----')
-    print(booking)
-        
-    # assume the user has logged in and has filled up his info
-    # invoke passenger microservice to get the passenger info by email
-    email = booking["email"]
-    get_passenger = invoke_http(passenger_URL + "/" + email, method='GET')
-    print('result:', get_passenger)
-
-    # record the activity log anyway
-    print('\n\n-----Invoking activity_log microservice-----')
-    invoke_http(activity_log_URL, method="POST", json=get_passenger)
-    print("\nget_passenger sent to activity log.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
-
-    # Check the get_passenger result; if a failure, send it to the error microservice.
-    code = get_passenger["code"]
-    if code not in range(200, 300):
-
-        # if no data found in the passenger db, 
-        # manual create booking info, and save passenger data into db
-        if code == 404:
-            # this part is gotten from UI form
-            first_time_booking_user = {"passport": "W36545625", "lastname": "wang", "firstname": "faye", 
-                "dob": "08/08/1969", "gender": "Female", "nationality": "Chinese", "phone": "+8618473649205"}
-            first_time_booking_flight = {"flightNumber":'MF8765', "departureDate": '2022-05-20',
-                "departureCity": 'Singapore', "arrivalCity": 'Beijing', "flightClass": 'Business', 
-                "baggage": '20kg', "price": '500.00', "bookingStatus": 'Pending'}
-
-
-            first_time_booking = {**first_time_booking_user, **first_time_booking_flight}
-            first_time_booking["email"] = booking["email"]
-            passport = first_time_booking["passport"]
-            flightNumber = first_time_booking["flightNumber"]
-            bookingId = passport+flightNumber
-
-            create_user = invoke_http(passenger_URL + "/" + booking["email"], method='POST', json=first_time_booking_user)
-            create_first_time_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=first_time_booking)
-
-                # record the activity log anyway
-            print('\n\n-----Invoking activity_log microservice-----')
-            invoke_http(activity_log_URL, method="POST", json=create_first_time_booking)
-            invoke_http(activity_log_URL, method="POST", json=create_user)
-
-            print("\nBooking sent to activity log.\n")
-            # - reply from the invocation is not used;
-            # continue even if this invocation fails
-        
-            # Check the booking result; if a failure, send it to the error microservice.
-            code = create_first_time_booking["code"]
-            if code not in range(200, 300):
-            
-                # Inform the error microservice
-                print('\n\n-----Invoking error microservice as booking fails-----')
-                invoke_http(error_URL, method="POST", json=create_first_time_booking)
-                invoke_http(error_URL, method="POST", json=create_user)
-                # - reply from the invocation is not used; 
-                # continue even if this invocation fails
-                print("Booking status ({:d}) sent to the error microservice:".format(
-                    code), create_first_time_booking)
-        
-                # 7. Return error
-                return {
-                    "code": 500,
-                    "data": {"booking_result": create_first_time_booking, "passenger_creation": create_user},
-                    "message": "Booking creation failure sent for error handling."
-                }
-        
-                # 7. Return created booking record
-            return {
-                "code": 201,
-                "data": {
-                    # "get_passenger_result": get_passenger,
-                    "booking_result": create_first_time_booking, 
-                    "passenger_creation": create_user
-                }
-            }
-
-        # Inform the error microservice
-        print('\n\n-----Invoking error microservice as get_passenger fails-----')
-        invoke_http(error_URL, method="POST", json=get_passenger)
-        # - reply from the invocation is not used; 
-        # continue even if this invocation fails
-        print("get_passenger status ({:d}) sent to the error microservice:".format(
-            code), get_passenger)
-
-        # 7. Return error
-        return {
-            "code": 500,
-            "data": {"get_passenger_result": get_passenger},
-            "message": "get_passenger failure sent for error handling."
-        }
-    
+    # Invoke the booking microservice
     print('\n-----Invoking booking microservice-----')
 
-    # assume gotten flight info from UI
-    # add passenger + flight info into booking db
-    flight_info = {"flightNumber":'MF1314', "departureDate": '2022-05-20',
-    "departureCity": 'Singapore', "arrivalCity": 'Beijing', "flightClass": 'Business', 
-    "baggage": '20kg', "price": '500.00', "bookingStatus": 'Pending'}
-    passenger_info = get_passenger["data"]
-    booking_info = {**passenger_info, **flight_info}
-    print('Booking summary:', booking_info)
-    passport = booking_info["passport"]
-    flightNumber = booking_info["flightNumber"]
+    # add passenger + flight info into booking db (hardcode for now)
+    print('Booking summary:', booking)
+    passport = booking["passport"]
+    flightNumber = booking["flightNumber"]
     bookingId = passport+flightNumber
-    create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking_info)
-
-    # print('result:', create_booking)
-
-    # record the activity log anyway
-    print('\n\n-----Invoking activity_log microservice-----')
-    invoke_http(activity_log_URL, method="POST", json=create_booking)
-    print("\nBooking sent to activity log.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
+    create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking)
 
     # Check the booking result; if a failure, send it to the error microservice.
     code = create_booking["code"]
+
     if code not in range(200, 300):
-
         # Inform the error microservice
-        print('\n\n-----Invoking error microservice as booking fails-----')
-        invoke_http(error_URL, method="POST", json=create_booking)
-        # - reply from the invocation is not used; 
-        # continue even if this invocation fails
-        print("Booking status ({:d}) sent to the error microservice:".format(
-            code), create_booking)
+        print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
+        message = json.dumps(create_booking)
+        amqp_setup_email.channel.basic_publish(exchange=amqp_setup_email.exchangename, routing_key="booking.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
-        # 7. Return error
+        print("\nBooking status ({:d}) published to the RabbitMQ Exchange:".format(code), create_booking)
+
+        # Return error
         return {
-            "code": 500,
-            "data": {"booking_result": create_booking},
-            "message": "Booking creation failure sent for error handling."
+            "code": 400,
+            "data": {
+                "create_booking": create_booking
+            },
+            "message": "Booking record error sent for error handling."
         }
 
-        # 7. Return created booking record
+    # Return created booking record
     return {
         "code": 201,
         "data": {
-            # "get_passenger_result": get_passenger,
-            "booking_result": create_booking
-        }
+            "create_booking": create_booking
+        },
+        "message": "Booking record has been created."
     }
 
 
 def processGuestBooking():
     return "ask them to login first"
-
-
-
-
-# validation part, check if the database have sufficient slots
-# 
-# 
-# 
-# to be done
-
-
 
 
 if __name__ == "__main__":

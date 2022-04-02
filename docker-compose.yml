@@ -1,0 +1,102 @@
+version: "3.8"
+
+volumes:
+  rabbitmq_data:
+
+services:
+ 
+  ###################################
+  # Booking: The Booking microservice
+  ###################################
+  booking:
+    build:
+      context: ./
+      dockerfile: booking.Dockerfile
+    image: wyf114/booking:esd
+    restart: always
+    environment:
+      dbURL: dbURL=mysql+mysqlconnector://root:root@localhost:3306/booking
+      PYTHONUNBUFFERED: 1
+ 
+  #######################################################
+  # Passenger: The Passenger microservice
+  #######################################################
+  passenger:
+    build:
+      context: ./
+      dockerfile: passenger.Dockerfile
+    image: wyf114/passenger:esd
+    restart: always
+    environment:
+      dbURL: dbURL=mysql+mysqlconnector://root:root@localhost:3306/passenger
+      PYTHONUNBUFFERED: 1
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+      
+  #################################################
+  # Activity Log: The Activity Log microservice
+  #################################################
+  activity_log:
+    build:
+      context: ./
+      dockerfile: activity_log.Dockerfile
+    image: wyf114/activity_log:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ###################################
+  # Error: The Error microservice
+  ###################################
+  error:
+    build:
+      context: ./
+      dockerfile: error.Dockerfile
+    image: wyf114/error:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ###############################################
+  # Make Booking: The Make Booking microservice
+  ###############################################
+  make_booking:
+    build:
+      context: ./
+      dockerfile: make_booking.Dockerfile
+    image: wyf114/make_booking:esd
+    restart: always
+    depends_on:
+      - booking
+      - passenger
+      - activity_log
+      - error
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      booking_URL: http://booking:5001/booking
+      passenger_URL: http://passenger:5000/passenger
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5100:5100"
+
