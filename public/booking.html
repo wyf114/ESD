@@ -133,18 +133,16 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var element = document.querySelector('#gbutton')
-            element.innerHTML = '<a onclick="signOut()">Sign out </a>';
+            element.innerHTML = '<a href = "booking.html" onclick="signOut()">Sign out</a>';
             }
 
-            function signOut() {
-            gapi.auth2.getAuthInstance().signOut().then(function() {
-                console.log('user signed out')
-                window.location = window.location.href;
-                element.innerHTML = '<div class="g-signin2" data-onsuccess="onSignIn">';
-
-            });
-            }
-
+        function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        auth2.disconnect();
+        });
+        }
 
     </script>
 

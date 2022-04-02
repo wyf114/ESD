@@ -21,6 +21,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <meta name = "google-signin-client_id" content="648525575446-6302bk083ohom5pd21knqplqn02gqakc.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+ 
 </head>
 
 <body>
@@ -93,11 +95,11 @@
                     <form action="./payment.html" method="POST">
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2" >Last Name</p> <input class="form-control" type="name"
-                            id ="lastname" value="James">
+                            id ="lastname" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2" >First Name</p> <input class="form-control" type="name"
-                            id ="firstname" value="Wang">
+                            id ="firstname" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Gender</p>
@@ -106,7 +108,7 @@
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Nationality</p> <input class="form-control" type="text"
-                                value="E7662876M">
+                                value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Date of birth</p> <input class="form-control" type="date"
@@ -114,15 +116,15 @@
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Passport Number</p> <input class="form-control" type="text"
-                                value="E7662876M">
+                                value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Email address</p> <input class="form-control" type="email"
-                            id ="email" value="luke@skywalker.com">
+                            id ="email" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Phone number</p> <input class="form-control" type="phone"
-                                value="12345678">
+                                value="">
                         </div>
                         <input class="btn btn-primary mt-2" type="submit" value="Make booking"/>
 
@@ -154,7 +156,7 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var element = document.querySelector('#gbutton')
-            element.innerHTML = '<a onclick="signOut()">Sign out </a>';
+            element.innerHTML = '<a href = "bookingform.html" onclick="signOut()">Sign out</a>';
 
             var firstname = document.getElementById('firstname');
             console.log(firstname)
@@ -167,14 +169,13 @@
             email.value = profile.getEmail()
             }
 
-            function signOut() {
-            gapi.auth2.getAuthInstance().signOut().then(function() {
-                console.log('user signed out')
-                window.location = window.location.href;
-                element.innerHTML = '<div class="g-signin2" data-onsuccess="onSignIn">';
-
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            auth2.disconnect();
             });
-            }
+        }
     </script>
 </body>
 
