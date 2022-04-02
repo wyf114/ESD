@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import sys
 from os import environ
+from flask_cors import CORS
 
 
 app = Flask(__name__)
@@ -18,6 +19,8 @@ elif my_os == "win32" or my_os == "win64":
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+CORS(app)  
 
 # passenger table setup
 class Passenger(db.Model):
