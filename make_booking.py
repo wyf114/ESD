@@ -5,7 +5,7 @@ import requests
 from invokes import invoke_http
 import json
 from os import environ
-import amqp_setup_email
+import amqp_setup
 import pika
 import json
 
@@ -15,8 +15,8 @@ CORS(app)
 
 booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
 passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
-activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"
-error_URL = environ.get('error_URL') or "http://localhost:5004/error"
+# activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"
+# error_URL = environ.get('error_URL') or "http://localhost:5004/error"
 # passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
 
 
@@ -85,7 +85,7 @@ def processMemberBooking(booking):
         # Inform the error microservice
         print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
         message = json.dumps(create_booking)
-        amqp_setup_email.channel.basic_publish(exchange=amqp_setup_email.exchangename, routing_key="booking.error", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
         print("\nBooking status ({:d}) published to the RabbitMQ Exchange:".format(code), create_booking)
