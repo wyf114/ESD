@@ -69,35 +69,23 @@
         </div> <!-- .tm-top-bar -->
 
 
-        <!-- ---booking--- -->
-      
+        <!-- ---booking history--- -->
+
         <div class="container d-lg-flex mt-5">
-        <div class="box-3">
-            <div class="box-inner-2">
-                <div>
-                    <p class="fw-bold">All Booking</p>
-                    <p id="message"></p>
-                </div>
-                <div class="grid">
-                    <div class="g-col-6">
-                        <p id="lastname"></p>
-                        <p id="firstname"></p>
-                        <p id="passport"></p>
-                        <p id="email"></p>
-                        <p id="phone"></p>
-                        <p id="flightNumber"></p>
-                        <p id="departureDate"></p>
-                        <p id="departureCity"></p>
-                        <p id="arrivalCity"></p>
-                        <p id="flightClass"></p>
-                        <p id="all"></p>
-                        
+            <div class="box-3">
+                <div class="box-inner-2">
+                    <div>
+                        <p class="fw-bold">All Booking</p>
+                        <p id="message"></p>
                     </div>
-                    <div class="g-col-6"></div>
+                    <div class="row" id="info">
+                    </div>
                 </div>
                 
             </div>
-        </div>
+           
+
+            
         </div>
 
 
@@ -136,7 +124,7 @@ function signOut() {
 // booking history
 function retriveBooking(){
 email = "wyf102@gmail.com";
-// console.log("email", email)
+console.log("email", email)
 const get_all_bookings_URL = "http://localhost:5001/booking";
 const response = 
 fetch(`${get_all_bookings_URL}/${email}`)
@@ -148,32 +136,42 @@ fetch(`${get_all_bookings_URL}/${email}`)
                 document.getElementById('message').innerText = 'No Past Booking'
                 booking = [];
             } else {
-                booking = [data.data];
+                booking_obj = data.data.bookings;
                 console.log("data",data);
-                console.log("booking", booking);
+                console.log("booking", booking_obj);
                 
             }
-            let lastName = document.getElementById("lastname");
-            let firstName = document.getElementById("firstname");
-            let passport = document.getElementById("passport");
-            let db_email = document.getElementById("email");
-            let phone = document.getElementById("phone");
-            let flightNumber = document.getElementById("flightNumber");
-            let departureDate = document.getElementById("departureDate");
-            let departureCity = document.getElementById("departureCity");
-            let arrivalCity = document.getElementById("arrivalCity");
-            let flightClass = document.getElementById("flightClass");
+            
+            let info = document.getElementById("info");
+            var str = '';
+            for (let i=0;i<booking_obj.length;i++){
+                str += `<div class="col-sm">`
+                let lastname = booking_obj[i].lastname 
+                let firstname = booking_obj[i].lastname
+                let passport = booking_obj[i].passport
+                let email = booking_obj[i].email
+                let phone = booking_obj[i].phone
+                let flightNumber = booking_obj[i].flightNumber
+                let departureDate = booking_obj[i].departureDate
+                let departureCity = booking_obj[i].departureCity       
+                let arrivalCity = booking_obj[i].arrivalCity
+                let flightClass = booking_obj[i].flightClass         
+
+                str += `<p>Booking ${i+1}</p>
+                    <p>Last Name: ${lastname}</p>
+                    <p>First Name: ${firstname}</p>
+                    <p>Passport: ${passport}</p>
+                    <p>Email: ${email}</p>
+                    <p>Phone: ${phone}</p>
+                    <p>Flight Number: ${flightNumber}</p>
+                    <p>Departure Date: ${departureDate}</p>
+                    <p>Departure City: ${departureCity}</p>
+                    <p>Arrival City: ${arrivalCity}</p>
+                    <p>Class: ${flightClass}</p>
+                </div>`
+                info.innerHTML = str;
+            }
         
-            lastName.innerHTML="Last Name: " + booking[0]['bookings'][0].lastname;
-            firstName.innerHTML= "First Name: " + booking[0]['bookings'][0].firstname;
-            passport.innerHTML= "Passport: " +booking[0]['bookings'][0].passport;
-            db_email.innerHTML= "Email: " +booking[0]['bookings'][0].email;
-            phone.innerHTML= "Phone: " +booking[0]['bookings'][0].phone;
-            flightNumber.innerHTML= "Flight Number: " +booking[0]['bookings'][0].flightNumber;
-            departureDate.innerHTML= "Departure Date: " +booking[0]['bookings'][0].departureDate;
-            departureCity.innerHTML= "Departure: " +booking[0]['bookings'][0].departureCity;
-            arrivalCity.innerHTML= "Arrival: " +booking[0]['bookings'][0].arrivalCity;
-            flightClass.innerHTML= "Class: " +booking[0]['bookings'][0].flightClass;
         })
         .catch(error => {
             // Errors when calling the service; such as network error, 
@@ -181,6 +179,7 @@ fetch(`${get_all_bookings_URL}/${email}`)
             console.log(error);
         });
 }
+
 </script>
 
 
