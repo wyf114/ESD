@@ -21,9 +21,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="./js/paymentprocess.js"></script>
 </head>
 
-<body>
+<body onload="showPayment()">
     <div class="tm-main-content" id="top">
         <div class="tm-top-bar-bg"></div>
         <div class="tm-top-bar" id="tm-top-bar">
@@ -55,6 +56,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id = "gbutton"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="emailTxt"></a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -68,8 +72,8 @@
 <div class="box-3">
     <div class="box-inner-2">
         <div>
-            <p class="fw-bold">Payment Details</p>
-            <p class="dis mb-3">Complete your booking by providing your payment details</p>
+            <p class="fw-bold">Make a Payment</p>
+            <p class="dis mb-3">Your booking is only confirmed upon payment</p>
         </div>
         <form action="">
 
@@ -99,20 +103,15 @@
                     </div>
 
                     <div class="d-flex flex-column dis">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <p>Subtotal</p>
-                            <p><span class="fas fa-dollar-sign"></span>230.00</p>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <p>GST<span>(10%)</span></p>
-                            <p><span class="fas fa-dollar-sign"></span>23.00</p>
-                        </div>
+                        
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <p class="fw-bold">Total</p>
-                            <p class="fw-bold"><span class="fas fa-dollar-sign"></span>253.00</p>
+                            <p id="price" class="fw-bold"><span class="fas fa-dollar-sign" ></span>253.00</p>
                         </div>
-                        <div class="btn btn-primary mt-2">Pay<span
-                                class="fas fa-dollar-sign px-1"></span>253.00 </div>
+                        <p id="email" style="display: none"></p>
+                        <!-- change this -->
+                        <div class="btn btn-primary mt-2">Pay</div>
+                        <!-- -- -->
                     </div>
                 </div>
             </div>
