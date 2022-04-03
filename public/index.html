@@ -15,8 +15,10 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- Bootstrap style -->
     <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
     <link rel="stylesheet" href="css/templatemo-style.css"> <!-- Templatemo style -->
-    <meta name = "google-signin-client_id" content="648525575446-6302bk083ohom5pd21knqplqn02gqakc.apps.googleusercontent.com">
+    <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
 
 </head>
 
@@ -211,6 +213,10 @@
     <script src="js/jquery.scrollTo.min.js"></script> <!-- https://github.com/flesler/jquery.scrollTo -->
     <script>
 
+        // document.getElementById('btnSubmit').onclick = function(){
+        //     location.href = "booking.html";
+        // }
+
         /* DOM is ready
         ------------------------------------------------*/
         $(function () {
@@ -236,6 +242,11 @@
 
         })
 
+        gapi.load('auth2',function(){
+            gapi.auth2.init();
+        }
+        )
+
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -244,18 +255,17 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var element = document.querySelector('#gbutton')
-            element.innerText = "Welcome "+googleUser.getBasicProfile().getGivenName()+"!";
-            element.innerHTML = '<a onclick="signOut()">Sign out</a>';
+            element.innerHTML = '<a href = "index.html" onclick="signOut()">Sign out</a>';
             }
 
-            function signOut() {
-            gapi.auth2.getAuthInstance().signOut().then(function() {
-                console.log('user signed out')
-                window.location = window.location.href;
-                element.innerHTML = '<div class="g-signin2" data-onsuccess="onSignIn">';
 
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            auth2.disconnect();
             });
-            }
+        }
 
 
     </script>

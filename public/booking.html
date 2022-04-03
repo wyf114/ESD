@@ -17,12 +17,12 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- Bootstrap style -->
     <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
     <link rel="stylesheet" href="css/templatemo-style.css"> <!-- Templatemo style -->
-    <meta name = "google-signin-client_id" content="648525575446-6302bk083ohom5pd21knqplqn02gqakc.apps.googleusercontent.com">
+    <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 </head>
-
-<body onload="loadResultsPage()">
+<body>
+<!-- <body onload="loadResultsPage()"> -->
     <div class="tm-main-content" id="top">
         <div class="tm-top-bar-bg"></div>
         <div class="tm-top-bar" id="tm-top-bar">
@@ -54,6 +54,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id = "gbutton"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="emailTxt"></a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -69,21 +72,28 @@
                 <div class="tab-pane">
 
                     <div class="search-results-wrap" id="searchResultsHere">
-                        <!-- <div class="search-results">                            
-                            <div class="tm-recommended-description-box">
-                                <h3 class="tm-recommended-title">JY315</h3>
-                                <p class="tm-text-highlight">19:05 - 123:25</br>Singapore to london</p>
-                                <p class="tm-text-gray">18 Mar (Fri)</br>
-                                    Changi
-                                    Terminal 3</p>
+                        <div class="search-results-wrap" id="searchResultsHere">
+                            <div class="search-results">                            
+                                <div class="tm-recommended-description-box" >
+                                    <h3 class="tm-recommended-title" id="flightNumber">JY315</h3>
+                                    <p class="tm-text-highlight" id= "departTime">19:05 </p>
+                                        - 
+                                    <p class="tm-text-highlight" id= "arriveTime">23:25</p></br>
+                                    <p class="tm-text-highlight" id= "originCode">Singapore</p> 
+                                    to 
+                                    <p class="tm-text-highlight" id= "desCode">london</p>
+                                    <p class="tm-text-gray" id= "departDate">18 Mar (Fri)</p></br>
+                                    <p class="tm-text-gray">   Changi
+                                        Terminal 3</p>
+                                <!-- </div> -->
+                                <a href="./bookingform.html">
+                                <!-- <a class="tm-recommended-price-box"> -->
+                                    <p class="tm-recommended-price" id="price">$190</p>
+                                    <button class="tm-recommended-price-link" onclick="bookFlight()">Book</button>
+                                <!-- </a> -->
                             </div>
-                            <a href="./bookingform.html" class="tm-recommended-price-box">
-                                <p class="tm-recommended-price">$190</p>
-                                <p class="tm-recommended-price-link">Book</p>
-                            </a>
-                        </div> -->
-
-                    </div>
+    </div>
+                        </div>
 
                     <a href="#" class="text-uppercase btn-primary tm-btn mx-auto tm-d-table">Go to the top</a>
                 </div> <!-- end results -->
@@ -100,7 +110,8 @@
 
     <!-- load JS files -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="js/formprocess.js"></script>
+    <!-- <script src="js/formprocess.js"></script> -->
+    <script src="js/bookingprocess.js"></script>
     <script src="js/jquery-1.11.3.min.js"></script> <!-- jQuery (https://jquery.com/download/) -->
     <script src="js/popper.min.js"></script> <!-- https://popper.js.org/ -->
     <script src="js/bootstrap.min.js"></script> <!-- https://getbootstrap.com/ -->
@@ -125,7 +136,8 @@
             });
 
             
-        function onSignIn(googleUser) {
+
+            function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
             console.log('Name: ' + profile.getName());
@@ -133,18 +145,16 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var element = document.querySelector('#gbutton')
-            element.innerHTML = '<a onclick="signOut()">Sign out </a>';
+            element.innerHTML = '<a href = "booking.html" onclick="signOut()">Sign out</a>';
             }
 
             function signOut() {
-            gapi.auth2.getAuthInstance().signOut().then(function() {
-                console.log('user signed out')
-                window.location = window.location.href;
-                element.innerHTML = '<div class="g-signin2" data-onsuccess="onSignIn">';
-
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            auth2.disconnect();
             });
             }
-
 
     </script>
 

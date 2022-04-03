@@ -19,11 +19,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <meta name = "google-signin-client_id" content="648525575446-6302bk083ohom5pd21knqplqn02gqakc.apps.googleusercontent.com">
+    <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="js/bookingformprocess.js"></script>
 </head>
 
-<body>
+<body onload="showPassenger()">
     <div class="tm-main-content" id="top">
         <div class="tm-top-bar-bg"></div>
         <div class="tm-top-bar" id="tm-top-bar">
@@ -55,6 +56,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id = "gbutton"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
                                 </li>
+                                <li class="nav-item">
+                                <a class="nav-link" id="emailTxt"></a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -64,18 +68,22 @@
 
         <div class="container d-lg-flex mt-5">
             <div class="box-1 bg-light user">
-                <div class="d-flex align-items-center mb-3"> <img
+                <!-- <div class="d-flex align-items-center mb-3"> <img
                         src="https://images.pexels.com/photos/4925916/pexels-photo-4925916.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
                         class="pic rounded-circle" alt="">
                     <p class="ps-2 name">Oliur</p>
-                </div>
+                </div> -->
                 <div class="box-inner-1 pb-3 mb-3 ">
                     <div class="d-flex justify-content-between mb-3 userdetails">
-                        <p class="fw-bold">Singapore to London</p>
-                        <p class="fw-lighter"><span class="fas fa-dollar-sign"></span>230.00</p>
+                        <p class="fw-bold" id="originCode">Singapore</p> 
+                        <p class="fw-bold">to</p>
+                        <p class="fw-bold" id="desCode">London</p>
+                        <p class="fw-lighter" id="price"><span class="fas fa-dollar-sign"></span>230.00</p>
                     </div>
-
-                    <p class="dis info my-3">AR425 </br>10:35 - 14:55 18 Mar (Fri) </p>
+                    Flight Number: <p  id="flightNumber">AR425 </p>
+                    Depart time: <p  id="departTime">10:35</p>
+                    Arrive time: <p  id="arriveTime"> 14:55</p>
+                    Depart Date: <p  id="departDate"> 18 Mar</p>
                     <h4>Travel advisories</h4>
                     <p> You are responsible for meeting all entry requirements for your destination. As travel
                         regulations may change at short notice, we advise you to check the latest travel advisory issued
@@ -90,41 +98,42 @@
                         <p class="fw-bold">Personal Details</p>
                         <p class="dis mb-3">Complete your booking by providing your personal details</p>
                     </div>
-                    <form action="./payment.html" method="POST">
+                    <form action="">
+                    <!-- <form action="./payment.html" method="POST"> -->
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2" >Last Name</p> <input class="form-control" type="name"
-                            id ="lastname" value="James">
+                            id ="lastname" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2" >First Name</p> <input class="form-control" type="name"
-                            id ="firstname" value="Wang">
+                            id ="firstname" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Gender</p>
-                            <input type="radio" name="gender" value="male"> Male
-                            <input type="radio" name="gender" value="female"> Female
+                            <input type="radio" name="gender" id="male" value="male"> Male
+                            <input type="radio" name="gender" id="female" value="female"> Female
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Nationality</p> <input class="form-control" type="text"
-                                value="E7662876M">
+                               id="nationality" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Date of birth</p> <input class="form-control" type="date"
-                                value="2022/03/27">
+                               id="dob" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Passport Number</p> <input class="form-control" type="text"
-                                value="E7662876M">
+                              id="passport"  value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Email address</p> <input class="form-control" type="email"
-                            id ="email" value="luke@skywalker.com">
+                            id ="email" value="">
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Phone number</p> <input class="form-control" type="phone"
-                                value="12345678">
+                             id="phone"   value="">
                         </div>
-                        <input class="btn btn-primary mt-2" type="submit" value="Make booking"/>
+                        <input class="btn btn-primary mt-2"  onclick = "confirmBooking()" value="Make booking"/>
 
                     </form>
              </div>
@@ -154,7 +163,7 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             var element = document.querySelector('#gbutton')
-            element.innerHTML = '<a onclick="signOut()">Sign out </a>';
+            element.innerHTML = '<a href = "bookingform.html" onclick="signOut()">Sign out</a>';
 
             var firstname = document.getElementById('firstname');
             console.log(firstname)
@@ -164,17 +173,20 @@
             lastname.value = profile.getFamilyName()
 
             var email = document.getElementById('email');
+            var emailTxt= document.getElementById('emailTxt');
             email.value = profile.getEmail()
+            // email.value = profile.getEmail()
             }
+
 
             function signOut() {
-            gapi.auth2.getAuthInstance().signOut().then(function() {
-                console.log('user signed out')
-                window.location = window.location.href;
-                element.innerHTML = '<div class="g-signin2" data-onsuccess="onSignIn">';
-
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            auth2.disconnect();
             });
             }
+        
     </script>
 </body>
 
