@@ -2,6 +2,11 @@ version: "3.8"
 
 volumes:
   rabbitmq_data:
+  pgdata:
+
+networks:
+  esd_default:
+    driver: bridge
 
 services:
  
@@ -15,7 +20,7 @@ services:
     image: wyf114/booking:esd
     restart: always
     environment:
-      dbURL: dbURL=mysql+mysqlconnector://root:root@localhost:3306/booking
+      dbURL: dbURL=mysql+mysqlconnector://root:root@@host.docker.internal:3306/booking
       PYTHONUNBUFFERED: 1
  
   #######################################################
@@ -28,7 +33,7 @@ services:
     image: wyf114/passenger:esd
     restart: always
     environment:
-      dbURL: dbURL=mysql+mysqlconnector://root:root@localhost:3306/passenger
+      dbURL: dbURL=mysql+mysqlconnector://root:root@@host.docker.internal:3306/passenger
       PYTHONUNBUFFERED: 1
 
   ####################################
@@ -99,4 +104,27 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5100:5100"
+
+  #######################################
+  # Postgres: The database used by the project
+  #######################################
+  db:
+    image: postgres:9.6
+    restart: always
+    networks:
+      - esd_default
+    environment:
+      POSTGRES_DB: esd
+      POSTGRES_USER: esd
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "esd"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
 

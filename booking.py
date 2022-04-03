@@ -12,11 +12,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # check os and change sql setting respectively
-my_os=sys.platform
-if my_os == "darwin":
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
-elif my_os == "win32" or my_os == "win64":
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
+# my_os=sys.platform
+# if my_os == "darwin":
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
+# elif my_os == "win32" or my_os == "win64":
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
