@@ -173,5 +173,35 @@ def create_booking(bookingId):
         }
     ), 201
 
+# update booking by bookingId
+@app.route("/booking/<string:bookingId>", methods=['PUT'])
+def update_booking(bookingId):
+    booking = Booking.query.filter_by(bookingId=bookingId).first()
+    if booking:
+        print(booking)
+        bookingStatus = request.get_json(force=True)
+        print("data is " + format(bookingStatus))
+        booking.bookingStatus = bookingStatus["bookingStatus"]
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "bookingId": bookingId
+                },
+                "message": "An error occurred updating the booking."
+            }
+        ), 500
+    # print(booking.json())
+    return jsonify(
+        {
+            "code": 201,
+            "data": booking.json()
+        }
+    ), 201
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
