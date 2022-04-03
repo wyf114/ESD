@@ -21,12 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-<<<<<<< HEAD
     <script src="js/bookingformprocess.js"></script>
-=======
-
- 
->>>>>>> 0a22da7fc1bb7b7beeedb081d51c5e690bb375f0
 </head>
 
 <body onload="showPassenger()">
@@ -120,11 +115,7 @@
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Nationality</p> <input class="form-control" type="text"
-<<<<<<< HEAD
                                id="nationality" value="">
-=======
-                                value="">
->>>>>>> 0a22da7fc1bb7b7beeedb081d51c5e690bb375f0
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Date of birth</p> <input class="form-control" type="date"
@@ -132,11 +123,7 @@
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Passport Number</p> <input class="form-control" type="text"
-<<<<<<< HEAD
                               id="passport"  value="">
-=======
-                                value="">
->>>>>>> 0a22da7fc1bb7b7beeedb081d51c5e690bb375f0
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Email address</p> <input class="form-control" type="email"
@@ -144,11 +131,7 @@
                         </div>
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2">Phone number</p> <input class="form-control" type="phone"
-<<<<<<< HEAD
                              id="phone"   value="">
-=======
-                                value="">
->>>>>>> 0a22da7fc1bb7b7beeedb081d51c5e690bb375f0
                         </div>
                         <input class="btn btn-primary mt-2"  onclick = "confirmBooking()" value="Make booking"/>
 
@@ -191,17 +174,19 @@
 
             var email = document.getElementById('email');
             var emailTxt= document.getElementById('emailTxt');
-            emailTxt.innerHTML = profile.getEmail()
+            email.value = profile.getEmail()
             // email.value = profile.getEmail()
             }
 
-        function signOut() {
+
+            function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
             auth2.signOut().then(function () {
             console.log('User signed out.');
             auth2.disconnect();
             });
-        }
+            }
+        
     </script>
 </body>
 

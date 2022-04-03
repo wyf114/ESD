@@ -136,9 +136,8 @@
             });
 
             
-<<<<<<< HEAD
-=======
-        function onSignIn(googleUser) {
+
+            function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
             console.log('Name: ' + profile.getName());
@@ -148,15 +147,14 @@
             var element = document.querySelector('#gbutton')
             element.innerHTML = '<a href = "booking.html" onclick="signOut()">Sign out</a>';
             }
->>>>>>> 0a22da7fc1bb7b7beeedb081d51c5e690bb375f0
 
-        function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-        console.log('User signed out.');
-        auth2.disconnect();
-        });
-        }
+            function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            auth2.disconnect();
+            });
+            }
 
     </script>
 
