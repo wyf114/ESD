@@ -55,6 +55,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id = "gbutton"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="emailTxt"></a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -256,6 +259,7 @@
 
             var element = document.querySelector('#gbutton')
             element.innerHTML = '<a href = "index.html" onclick="signOut()">Sign out</a>';
+            var emailTxt= document.getElementById('emailTxt');
             }
 
 

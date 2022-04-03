@@ -98,8 +98,8 @@
                         <p class="fw-bold">Personal Details</p>
                         <p class="dis mb-3">Complete your booking by providing your personal details</p>
                     </div>
-                    <form action="">
-                    <!-- <form action="./payment.html" method="POST"> -->
+                    <!-- <form action=""> -->
+                    <form action="./payment.html" method="POST">
                         <div class="mb-3">
                             <p class="dis fw-bold mb-2" >Last Name</p> <input class="form-control" type="name"
                             id ="lastname" value="">
@@ -133,7 +133,7 @@
                             <p class="dis fw-bold mb-2">Phone number</p> <input class="form-control" type="phone"
                              id="phone"   value="">
                         </div>
-                        <input class="btn btn-primary mt-2"  onclick = "confirmBooking()" value="Make booking"/>
+                        <input class="btn btn-primary mt-2" type="submit" onclick = "confirmBooking()" value="Make booking"/>
 
                     </form>
              </div>
@@ -165,16 +165,7 @@
             var element = document.querySelector('#gbutton')
             element.innerHTML = '<a href = "bookingform.html" onclick="signOut()">Sign out</a>';
 
-            var firstname = document.getElementById('firstname');
-            console.log(firstname)
-            firstname.value = profile.getGivenName()
-
-            var lastname = document.getElementById('lastname');
-            lastname.value = profile.getFamilyName()
-
-            var email = document.getElementById('email');
             var emailTxt= document.getElementById('emailTxt');
-            email.value = profile.getEmail()
             // email.value = profile.getEmail()
             }
 

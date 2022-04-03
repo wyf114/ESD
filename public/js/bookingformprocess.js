@@ -82,8 +82,10 @@ function confirmBooking() {
     let passport = document.getElementById("passport").value;
     let email = document.getElementById("email").value;
     let phone = document.getElementById("phone").value;
+    var paymentInfo=[price,email];
+    localStorage.setItem("paymentInfo", paymentInfo);
+    console.log(localStorage.getItem("paymentInfo"));
     let makeBooking_URL = "http://localhost:5100/make_booking";
-    console.log(flightNumber);
     fetch(makeBooking_URL,
         {
             method: "POST",
