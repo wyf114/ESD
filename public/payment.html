@@ -144,15 +144,7 @@ function onSignIn(googleUser) {
     var element = document.querySelector('#gbutton')
     element.innerHTML = '<a href = "payment.html" onclick="signOut()">Sign out</a>';
 
-    var firstname = document.getElementById('firstname');
-    console.log(firstname)
-    firstname.value = profile.getGivenName()
-
-    var lastname = document.getElementById('lastname');
-    lastname.value = profile.getFamilyName()
-
-    var email = document.getElementById('email');
-    email.value = profile.getEmail()
+    var emailTxt= document.getElementById('emailTxt');
     }
 
     function signOut() {
