@@ -20,9 +20,12 @@ services:
     image: wyf114/booking:esd
     restart: always
     environment:
-      dbURL: dbURL=mysql+mysqlconnector://root:root@@host.docker.internal:3306/booking
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/booking
       PYTHONUNBUFFERED: 1
- 
+    ports:
+      - "5001:5001"
+
+
   #######################################################
   # Passenger: The Passenger microservice
   #######################################################
@@ -33,8 +36,11 @@ services:
     image: wyf114/passenger:esd
     restart: always
     environment:
-      dbURL: dbURL=mysql+mysqlconnector://root:root@@host.docker.internal:3306/passenger
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/passenger
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5000"
+
 
   ####################################
   # RabbitMQ: The messaging broker   

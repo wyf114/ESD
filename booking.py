@@ -33,7 +33,7 @@ class Booking(db.Model):
     passport = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
-    dob = db.Column(db.String(20), nullable=False)
+    dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     nationality = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), nullable=False)
