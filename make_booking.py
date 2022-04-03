@@ -1,3 +1,5 @@
+from distutils.log import error
+import email
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os, sys
@@ -33,21 +35,11 @@ def make_booking():
             booking = request.get_json(force=True)
             print("\nReceived a booking in JSON:", booking)
 
-            # check login status
-            login_status = True
-
-            # if logged in
-            if login_status:
-                # Get booking info {booking ID}
-                result = processMemberBooking(booking)
-                print('\n------------------------')
-                print('\nresult: ', result)
-                return jsonify(result), result["code"]
-            else:
-                result = processGuestBooking()
-                print('\n------------------------')
-                print('\nresult: ', result)
-                return jsonify(result), result["code"]
+            # Get booking info {booking ID}
+            result = processMemberBooking(booking)
+            print('\n------------------------')
+            print('\nresult: ', result)
+            return jsonify(result), result["code"]
 
         except Exception as e:
             # Unexpected error
@@ -99,6 +91,9 @@ def processMemberBooking(booking):
             "message": "Booking record error sent for error handling."
         }
 
+    # add passenger info into passenger db if not exist 
+    updatePassengerInfo(booking)
+
     # Return created booking record
     return {
         "code": 201,
@@ -109,8 +104,70 @@ def processMemberBooking(booking):
     }
 
 
-def processGuestBooking():
-    return "ask them to login first"
+def updatePassengerInfo(booking):
+    # check if the passenger info exists in the passenger db
+    email = booking["email"]
+    passenger_info = {}
+    passenger_info.update({ "passport": booking["passport"], "lastname": booking["lastname"], "firstname": booking["firstname"], 
+    "dob": booking["dob"], "gender": booking["gender"], "nationality": booking["nationality"], "phone":booking["phone"]})
+    
+    check_passenger = invoke_http(passenger_URL + "/" + email, method='GET')
+    code = check_passenger["code"]
+
+    # if no passenger found or error
+    if code not in range(200, 300):
+        # if no data found in the passenger db, save the new passenger data into db
+        if code == 404:
+            add_passenger = invoke_http(passenger_URL + "/" + email, method='POST', json=booking)
+            
+            # if error
+            if add_passenger["code"] not in range(200, 300):
+                # Inform the error microservice
+                print('\n\n-----Publishing the (add passenger error) message with routing_key=addPassenger.error-----')
+                message = json.dumps(add_passenger)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="addPassenger.error", 
+                    body=message, properties=pika.BasicProperties(delivery_mode = 2))
+                print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), add_passenger)
+                # Return error
+                return {
+                    "code": 400,
+                    "data": {
+                        "add_passenger": add_passenger
+                    },
+                    "message": "Add passenger record error sent for error handling."
+                    }
+            # Return created passenger record
+            return {
+                "code": add_passenger["code"],
+                "data": {
+                    "add_passenger": add_passenger
+                },
+                "message": "New passenger record has been created."
+            }
+        else:
+            # Inform the error microservice
+            print('\n\n-----Publishing the (Passenger error) message with routing_key=passenger.error-----')
+            message = json.dumps(check_passenger)
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="passenger.error", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2))
+            print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), check_passenger)
+            # Return error
+            return {
+                "code": 400,
+                "data": {
+                    "check_passenger": check_passenger
+                },
+                "message": "Passenger record error sent for error handling."
+                }
+
+    # Return checking record
+    return {
+        "code": code,
+        "data": {
+            "check_passenger": check_passenger
+        },
+        "message": "Passenger record exists."
+    }    
 
 
 if __name__ == "__main__":
