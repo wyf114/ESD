@@ -1,3 +1,4 @@
+import email
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -80,6 +81,7 @@ class Booking(db.Model):
 @app.route("/booking")
 def get_all():
     bookingList = Booking.query.all()
+    print(bookingList)
     if len(bookingList):
         return jsonify(
             {
@@ -97,22 +99,40 @@ def get_all():
     ),404
 
 # get bookings by bookingId
-@app.route("/booking/<string:bookingId>")
-def find_by_bookingId(bookingId):
-    booking = Booking.query.filter_by(bookingId=bookingId).first()
-    if booking:
+@app.route("/booking/<string:condition>")
+def find_by_condition(condition):
+    if "@" in condition:
+        myBookingList = Booking.query.filter_by(email=condition).all()
+        if len(myBookingList):
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "bookings": [booking.json() for booking in myBookingList]
+                    }
+                }
+            )
         return jsonify(
             {
-                "code": 200,
-                "data": booking.json()
+                "code": 404,
+                "message": "Oops. No booking found."
             }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "Booking not found."
-        }
-    ), 404
+        ),404
+    else:
+        booking = Booking.query.filter_by(bookingId=condition).first()
+        if booking:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": booking.json()
+                }
+            )
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Booking not found."
+            }
+        ), 404
 
 # create new booking
 @app.route("/booking/<string:bookingId>", methods=['POST'])
