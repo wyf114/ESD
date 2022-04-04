@@ -88,11 +88,11 @@ def processMemberBooking(booking):
 
         # Return error
         return {
-            "code": 400,
+            "code": code,
             "data": {
                 "create_booking": create_booking
             },
-            "message": "Booking record error sent for error handling."
+            "message": message
         }
 
     # add passenger info into passenger db if not exist 
@@ -122,7 +122,7 @@ def updatePassengerInfo(booking):
     if code not in range(200, 300):
         # if no data found in the passenger db, save the new passenger data into db
         if code == 404:
-            add_passenger = invoke_http(passenger_URL + "/" + email, method='POST', json=booking)
+            add_passenger = invoke_http(passenger_URL + "/" + email, method='POST', json=passenger_info)
             
             # if error
             if add_passenger["code"] not in range(200, 300):
