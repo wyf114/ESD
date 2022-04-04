@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 # check os and change sql setting respectively
 # my_os=sys.platform
 # if my_os == "darwin":
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
 # elif my_os == "win32" or my_os == "win64":
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
 
@@ -44,11 +44,17 @@ class Booking(db.Model):
     arrivalCity = db.Column(db.String(100), nullable=False) 
     departureTime = db.Column(db.String(100), nullable=False) 
     arrivalTime = db.Column(db.String(100), nullable=False) 
+    flightNumber2 = db.Column(db.String(50), nullable=False)
+    departureDate2 = db.Column(db.Date, nullable = False)
+    departureCity2 = db.Column(db.String(100), nullable=False)
+    arrivalCity2 = db.Column(db.String(100), nullable=False) 
+    departureTime2 = db.Column(db.String(100), nullable=False) 
+    arrivalTime2 = db.Column(db.String(100), nullable=False) 
     price = db.Column(db.Float, nullable=False) 
     bookingStatus = db.Column(db.String(50), nullable=False)
 
     def __init__(self, bookingId, passport, lastname, firstname, dob, gender, nationality, email, phone, 
-    flightNumber, departureDate, departureCity, arrivalCity, departureTime, arrivalTime,  price, bookingStatus):
+    flightNumber, departureDate, departureCity, arrivalCity, departureTime, arrivalTime, flightNumber2, departureDate2, departureCity2, arrivalCity2, departureTime2, arrivalTime2, price, bookingStatus):
         self.bookingId = bookingId
         self.passport = passport
         self.lastname = lastname
@@ -64,16 +70,25 @@ class Booking(db.Model):
         self.arrivalCity = arrivalCity
         self.departureTime = departureTime
         self.arrivalTime=arrivalTime
+        self.flightNumber2 = flightNumber2
+        self.departureDate2 = departureDate2
+        self.departureCity2 = departureCity2
+        self.arrivalCity2 = arrivalCity2
+        self.departureTime2 = departureTime2
+        self.arrivalTime2=arrivalTime2
         self.price = price
         self.bookingStatus = bookingStatus
 
     def json(self):
         return {"bookingId": self.bookingId, "passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
         "dob": self.dob, "gender": self.gender, "nationality": self.nationality, 
-        "email": self.email, "phone": self.phone, "flightNumber":self.flightNumber, "departureDate": self.departureDate,
+        "email": self.email, "phone": self.phone, 
+        "flightNumber":self.flightNumber, "departureDate": self.departureDate,
         "departureCity": self.departureCity, "arrivalCity": self.arrivalCity, 
-        "departureTime": self.departureTime,
-        "arrivalTime":self.arrivalTime,
+        "departureTime": self.departureTime, "arrivalTime":self.arrivalTime,
+        "flightNumber2":self.flightNumber2, "departureDate2": self.departureDate2,
+        "departureCity2": self.departureCity2, "arrivalCity2": self.arrivalCity2, 
+        "departureTime2": self.departureTime2, "arrivalTime2":self.arrivalTime2,
          "price": self.price, "bookingStatus": self.bookingStatus}
 
 # get all bookings from db

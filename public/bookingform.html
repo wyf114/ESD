@@ -45,10 +45,7 @@
                                     <a class="nav-link active" href="./index.html">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">My booking</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Recommended Places</a>
+                                    <a class="nav-link" href="./mybooking.html">My booking</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Contact Us</a>
@@ -57,7 +54,7 @@
                                     <a class="nav-link" id = "gbutton"><div class="g-signin2" data-onsuccess="onSignIn"></div></a>
                                 </li>
                                 <li class="nav-item">
-                                <a class="nav-link" id="emailTxt"></a>
+                                <a class="nav-link" id="emailTxt" style="display: none"></a>
                                 </li>
                             </ul>
                         </div>
@@ -75,15 +72,26 @@
                 </div> -->
                 <div class="box-inner-1 pb-3 mb-3 ">
                     <div class="d-flex justify-content-between mb-3 userdetails">
+                        <p class="fw-bold" id="originCode2">Singapore</p> 
+                        <p class="fw-bold">to</p>
+                        <p class="fw-bold" id="desCode2">London</p>
+                    </div>
+                    Flight Number: <p  id="flightNumber2">AR425 </p>
+                    Depart time: <p  id="departTime2">10:35</p>
+                    Arrive time: <p  id="arriveTime2"> 14:55</p>
+                    Depart Date: <p  id="departDate2"> 2022-04-02</p>
+
+                    <div class="d-flex justify-content-between mb-3 userdetails">
                         <p class="fw-bold" id="originCode">Singapore</p> 
                         <p class="fw-bold">to</p>
                         <p class="fw-bold" id="desCode">London</p>
-                        <p class="fw-lighter" id="price"><span class="fas fa-dollar-sign"></span>230.00</p>
                     </div>
                     Flight Number: <p  id="flightNumber">AR425 </p>
                     Depart time: <p  id="departTime">10:35</p>
                     Arrive time: <p  id="arriveTime"> 14:55</p>
                     Depart Date: <p  id="departDate"> 2022-04-02</p>
+                    Price: <p class="fw-lighter" id="price"><span class="fas fa-dollar-sign"></span>230.00</p>
+
                     <h4>Travel advisories</h4>
                     <p> You are responsible for meeting all entry requirements for your destination. As travel
                         regulations may change at short notice, we advise you to check the latest travel advisory issued
@@ -164,9 +172,9 @@
 
             var element = document.querySelector('#gbutton')
             element.innerHTML = '<a href = "bookingform.html" onclick="signOut()">Sign out</a>';
-
+// ---------don't delete this part!!------
             var emailTxt= document.getElementById('emailTxt');
-            // email.value = profile.getEmail()
+            emailTxt.innerHTML =profile.getEmail();
             }
 
 

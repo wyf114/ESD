@@ -48,14 +48,23 @@ function showPassenger() {
             });
             
     console.log(localStorage.getItem("fromFlightInfo").split(","));
-    let flightInfo = localStorage.getItem("fromFlightInfo").split(",");
-    document.getElementById("flightNumber").innerHTML = flightInfo[0];
-    document.getElementById("departTime").innerHTML = flightInfo[1];
-    document.getElementById("arriveTime").innerHTML = flightInfo[2];
-    document.getElementById("originCode").innerHTML = flightInfo[3];
-    document.getElementById("desCode").innerHTML = flightInfo[4];
-    document.getElementById("departDate").innerHTML = flightInfo[5];
-    document.getElementById("price").innerHTML = flightInfo[6];
+    console.log(localStorage.getItem("toFlightInfo").split(","));
+    let fromFlightInfo = localStorage.getItem("fromFlightInfo").split(",");
+    let toFlightInfo = localStorage.getItem("toFlightInfo").split(",");
+    document.getElementById("flightNumber").innerHTML = fromFlightInfo[0];
+    document.getElementById("departTime").innerHTML = fromFlightInfo[1];
+    document.getElementById("arriveTime").innerHTML = fromFlightInfo[2];
+    document.getElementById("originCode").innerHTML = fromFlightInfo[3];
+    document.getElementById("desCode").innerHTML = fromFlightInfo[4];
+    document.getElementById("departDate").innerHTML = fromFlightInfo[5];
+    document.getElementById("price").innerHTML = fromFlightInfo[6];
+
+    document.getElementById("flightNumber2").innerHTML = toFlightInfo[0];
+    document.getElementById("departTime2").innerHTML = toFlightInfo[1];
+    document.getElementById("arriveTime2").innerHTML = toFlightInfo[2];
+    document.getElementById("originCode2").innerHTML = toFlightInfo[3];
+    document.getElementById("desCode2").innerHTML = toFlightInfo[4];
+    document.getElementById("departDate2").innerHTML = toFlightInfo[5];
 }
 
 
@@ -68,6 +77,14 @@ function confirmBooking() {
     let originCode = document.getElementById("originCode").textContent;
     let desCode = document.getElementById("desCode").textContent;
     let departDate = document.getElementById("departDate").textContent;
+
+    let flightNumber2 = document.getElementById("flightNumber2").textContent;
+    let departTime2 = document.getElementById("departTime2").textContent;
+    let arriveTime2 = document.getElementById("arriveTime2").textContent;
+    let originCode2 = document.getElementById("originCode2").textContent;
+    let desCode2 = document.getElementById("desCode2").textContent;
+    let departDate2 = document.getElementById("departDate2").textContent;
+
     let price = document.getElementById("price").textContent;
     let lastName = document.getElementById("lastname").value;
     let firstName = document.getElementById("firstname").value;
@@ -101,6 +118,12 @@ function confirmBooking() {
                     "departureCity": originCode,
                     "arrivalCity": desCode,
                     "departureDate": departDate,
+                    "flightNumber2": flightNumber2,
+                    "departureTime2": departTime2,
+                    "arrivalTime2": arriveTime2,
+                    "departureCity2": originCode2,
+                    "arrivalCity2": desCode2,
+                    "departureDate2": departDate2,
                     "price": price,
                     "lastname": lastName,
                     "firstname": firstName,
