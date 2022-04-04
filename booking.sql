@@ -15,8 +15,8 @@ flightNumber varchar(50) NOT NULL,
 departureDate Date NOT NULL,
 departureCity varchar(100) NOT NULL,
 arrivalCity varchar(100) NOT NULL,
-departureTime time NOT NULL,
-arrivalTime time NOT NULL,
+departureTime varchar(50) NOT NULL,
+arrivalTime varchar(50) NOT NULL,
 price Float NOT NULL,
 bookingStatus varchar(50) NOT NULL,
 bookingId varchar(100) NOT NULL,
@@ -26,9 +26,9 @@ PRIMARY KEY (`bookingId`)
 
 INSERT INTO `booking` (`passport`, `lastname`, `firstname`, `dob`, `gender`,`nationality`,`email`,`phone`,
 `flightNumber`, `departureDate`, `departureCity`, `arrivalCity`, `departureTime`, `arrivalTime`, `price`, `bookingStatus`, `bookingId`) VALUES
-('Y12345678', 'Yifan', 'Wei', '14-01-1999', 'Female','Chinese','wyf102@gmail.com','+6512345678',
+('Y12345678', 'Yifan', 'Wei', '1999-01-14', 'Female','Chinese','wyf102@gmail.com','+6512345678',
 'MF5045', '2022-10-02', 'Singapore', 'Beijing', '20:15', '23:20', '500.00', 'Pending', 'MF5045Y12345678'),
-('Y12345678', 'Yifan', 'Wei', '14-01-1992', 'Female','Chinese','wyf102@gmail.com','+6512345678',
+('Y12345678', 'Yifan', 'Wei', '1999-01-15', 'Female','Chinese','wyf102@gmail.com','+6512345678',
 'MF5976', '2022-10-03', 'Singapore', 'Beijing', '18:15', '20:05', '500.00', 'Pending', 'MF5976Y12345678');
 
 -- ('L12353567', 'Leonardo', 'Da Vinci', '15/04/1452', 'Male', 'Italian', 'ldv0415@gmail.com', '+658765432');
