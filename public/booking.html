@@ -146,6 +146,9 @@
             var element = document.querySelector('#gbutton')
             element.innerHTML = '<a href = "booking.html" onclick="signOut()">Sign out</a>';
             var emailTxt= document.getElementById('emailTxt');
+            var id_token = googleUser.getAuthResponse().id_token;
+            // console.log("ID Token: " + id_token);
+            localStorage.setItem("loginID", id_token);
             }
 
         function signOut() {
@@ -153,6 +156,7 @@
         auth2.signOut().then(function () {
         console.log('User signed out.');
         auth2.disconnect();
+        localStorage.removeItem("loginID")
         });
         }
 

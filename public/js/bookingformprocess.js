@@ -71,6 +71,16 @@ function showPassenger() {
 
 
 function confirmBooking() {
+
+    let login = localStorage.getItem("loginID");
+    if (login==null){
+    window.alert("Please Sign in via Google!")
+    return
+    }
+
+    
+
+
     let flightNumber = document.getElementById("flightNumber").textContent;
     let departTime = document.getElementById("departTime").textContent;
     let arriveTime = document.getElementById("arriveTime").textContent;
