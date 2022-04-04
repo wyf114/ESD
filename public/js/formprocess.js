@@ -7,7 +7,7 @@ function loadResultsPage() {
     axios.get(url)
     .then(response => {
         if (response.data.status == "FAILURE") {
-            var errorMessage = "We are unable to find recommendations for your search. Please change your search criteria and resubmit the search."
+            var errorMessage = response.data.message
             document.getElementById("searchResultsHere").innerHTML = errorMessage
         }
         else {
@@ -30,14 +30,14 @@ function loadResultsPage() {
                 <div class="search-results">
 
                     <div class="tm-recommended-description-box">
-                        <h3 class="tm-recommended-title">${ret.legs[0].operatingAirline.code}${ret.legs[0].flightNumber}</h3>
-                        <p class="tm-text-highlight">${ret.departureDateTime.slice(10,16)} - ${ret.arrivalDateTime.slice(10,16)}${nextDay}</br>
-                        ${ret.originAirportCode} to ${ret.destinationAirportCode}</p>
-                        <p class="tm-text-gray">${ret.departureDateTime.slice(0,10)}</br>
+                        <h3 class="tm-recommended-title" id="flightNumber${returnCount}">${ret.legs[0].operatingAirline.code}${ret.legs[0].flightNumber}</h3>
+                        <p class="tm-text-highlight"><span id="departTime${returnCount}">${ret.departureDateTime.slice(11,16)}</span> -<span id="arriveTime${returnCount}">${ret.arrivalDateTime.slice(11,16)}${nextDay}</span></br>
+                        <span id="originCode${returnCount}">${ret.originAirportCode}</span> to <span id="desCode${returnCount}">${ret.destinationAirportCode}</span></p>
+                        <p class="tm-text-gray" id="departDate${returnCount}">${ret.departureDateTime.slice(0,10)}</p></br>
                     </div>
-                    <a href="./bookingform.html" class="tm-recommended-price-box">
-                        <p class="tm-recommended-price">${price}</p>
-                        <p class="tm-recommended-price-link">Book</p>
+                    <a href="./bookingform.html" class="tm-recommended-price-box" onclick="bookReturnFlight(${returnCount})">
+                        <p class="tm-recommended-price" id="price${returnCount}">${price}</p>
+                        <p class="tm-recommended-price-link" id="book${returnCount}">Book</p>
                     </a>
                 </div>
                 `
@@ -47,6 +47,8 @@ function loadResultsPage() {
                 }
             }
 
+            localStorage.setItem("returnStr", returnStr)
+
             for (let seg of items.flights[0].segments) {
                 counter++
 
@@ -54,29 +56,20 @@ function loadResultsPage() {
                 if (seg.departureDateTime.slice(0,10) != seg.arrivalDateTime.slice(0,10)) {
                     nextDay = " (next day)"
                 }
-
-                var collapsed = "true"
-                if (counter > 1) {
-                    collapsed = "false"
-                }
                 
                 pageStr += `
                 
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading${counter}">
-                    <button class="accordion-button tm-recommended-description-box" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${counter}" aria-expanded="${collapsed}" aria-controls="collapse${counter}">
-                        <h3 class="tm-recommended-title">${seg.legs[0].operatingAirline.code}${seg.legs[0].flightNumber}</h3>
-                        <p class="tm-text-highlight">${seg.departureDateTime.slice(10,16)} - ${seg.arrivalDateTime.slice(10,16)}${nextDay}</br>
-                        ${seg.originAirportCode} to ${seg.destinationAirportCode}</p>
-                        <p class="tm-text-gray">${seg.departureDateTime.slice(0,10)}</br>
+                <div class="search-results">
+                    <div class="tm-recommended-description-box">
+                        <h3 class="tm-recommended-title" id="toFlightNumber${counter}">${seg.legs[0].operatingAirline.code}${seg.legs[0].flightNumber}</h3>
+                        <p class="tm-text-highlight"><span id="toDepartTime${counter}">${seg.departureDateTime.slice(10,16)}</span> - <span id="toArriveTime${counter}">${seg.arrivalDateTime.slice(10,16)}${nextDay}</span></br>
+                        <span id="toOriginCode${counter}">${seg.originAirportCode}</span> to <span id="toDesCode${counter}">${seg.destinationAirportCode}</span></p>
+                        <p class="tm-text-gray"><span id="toDepartDate${counter}">${seg.departureDateTime.slice(0,10)}</span></br>
                         Changi Airport Terminal ${seg.legs[0].departureTerminal}</p>
-                    </button>
-                    </h2>
-                    <div id="collapse${counter}" class="accordion-collapse collapse show" aria-labelledby="heading${counter}" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            ${returnStr}
-                        </div>
                     </div>
+                        <a href="./bookreturnflight.html" class="tm-recommended-price-box" onclick="bookFlight(${counter})">
+                            <p class="tm-recommended-price-link">Choose Return Flights</p>
+                        </a>
                 </div>`
 
                 if (counter == 10) {
@@ -89,6 +82,11 @@ function loadResultsPage() {
         console.log(url)
         console.log(error)
     })
+}
+
+function loadReturnFlights() {
+    document.getElementById("returnResultsHere").innerHTML = localStorage.getItem("returnStr")
+
 }
 
 function sendRequest(jsonStr) {

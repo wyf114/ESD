@@ -46,8 +46,9 @@ function showPassenger() {
                 console.log(error);
 
             });
-    console.log(localStorage.getItem("flightInfo").split(","));
-    let flightInfo = localStorage.getItem("flightInfo").split(",");
+            
+    console.log(localStorage.getItem("fromFlightInfo").split(","));
+    let flightInfo = localStorage.getItem("fromFlightInfo").split(",");
     document.getElementById("flightNumber").innerHTML = flightInfo[0];
     document.getElementById("departTime").innerHTML = flightInfo[1];
     document.getElementById("arriveTime").innerHTML = flightInfo[2];
