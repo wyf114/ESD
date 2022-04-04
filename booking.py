@@ -107,12 +107,13 @@ def find_by_condition(condition):
     if "@" in condition:
         myBookingList = Booking.query.filter_by(email=condition).all()
         if len(myBookingList):
-            myBookingList = json.dumps(myBookingList, default=str)
+            # myBookingList = json.dumps(myBookingList, default=str)
+            # print(myBookingList)
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "bookings": [booking for booking in myBookingList]
+                        "bookings": [json.dumps(booking, default=str) for booking in myBookingList]
                     }
                 }
             )
