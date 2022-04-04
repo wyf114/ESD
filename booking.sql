@@ -32,9 +32,9 @@ PRIMARY KEY (`bookingId`)
 
 INSERT INTO `booking` (`passport`, `lastname`, `firstname`, `dob`, `gender`,`nationality`,`email`,`phone`,
 `flightNumber`, `departureDate`, `departureCity`, `arrivalCity`, `departureTime`, `arrivalTime`, `flightNumber2`, `departureDate2`, `departureCity2`, `arrivalCity2`, `departureTime2`, `arrivalTime2`,`price`, `bookingStatus`, `bookingId`) VALUES
-('Y12345678', 'Yifan', 'Wei', '14-01-1999', 'Female','Chinese','wyf102@gmail.com','+6512345678',
+('Y12345678', 'Yifan', 'Wei', '1999-01-14', 'Female','Chinese','wyf102@gmail.com','+6512345678',
 'MF5045', '2022-10-02', 'Singapore', 'Beijing', '20:15', '23:20', 'MF5055', '2022-10-06', 'Beijing', 'Singapore', '10:15', '13:20', '500.00', 'Pending', 'MF5045Y12345678'),
-('Y12345678', 'Yifan', 'Wei', '14-01-1992', 'Female','Chinese','wyf102@gmail.com','+6512345678',
+('Y12345678', 'Yifan', 'Wei', '1999-01-14', 'Female','Chinese','wyf102@gmail.com','+6512345678',
 'MF5976', '2022-12-03', 'Singapore', 'Beijing', '18:15', '20:05','MF5966', '2022-12-09', 'Beijing', 'Singapore', '08:15', '10:05', '500.00', 'Pending', 'MF5976Y12345678');
 
 -- ('L12353567', 'Leonardo', 'Da Vinci', '15/04/1452', 'Male', 'Italian', 'ldv0415@gmail.com', '+658765432');
