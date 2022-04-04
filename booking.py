@@ -43,13 +43,13 @@ class Booking(db.Model):
     # departureTime = db.Column(db.TIMESTAMP, nullable = False)
     departureCity = db.Column(db.String(100), nullable=False)
     arrivalCity = db.Column(db.String(100), nullable=False) 
-    flightClass = db.Column(db.String(50), nullable=False)
-    baggage = db.Column(db.String(50), nullable=False)
+    departureTime = db.Column(db.String(100), nullable=False) 
+    arrivalTime = db.Column(db.String(100), nullable=False) 
     price = db.Column(db.Float, nullable=False) 
     bookingStatus = db.Column(db.String(50), nullable=False)
 
     def __init__(self, bookingId, passport, lastname, firstname, dob, gender, nationality, email, phone, 
-    flightNumber, departureDate, departureCity, arrivalCity, flightClass, baggage, price, bookingStatus):
+    flightNumber, departureDate, departureCity, arrivalCity, departureTime, arrivalTime,  price, bookingStatus):
         self.bookingId = bookingId
         self.passport = passport
         self.lastname = lastname
@@ -61,11 +61,10 @@ class Booking(db.Model):
         self.phone = phone
         self.flightNumber = flightNumber
         self.departureDate = departureDate
-        # self.departureTime = departureTime
         self.departureCity = departureCity
         self.arrivalCity = arrivalCity
-        self.flightClass = flightClass
-        self.baggage = baggage
+        self.departureTime = departureTime
+        self.arrivalTime=arrivalTime
         self.price = price
         self.bookingStatus = bookingStatus
 
@@ -73,9 +72,10 @@ class Booking(db.Model):
         return {"bookingId": self.bookingId, "passport": self.passport, "lastname": self.lastname, "firstname": self.firstname, 
         "dob": self.dob, "gender": self.gender, "nationality": self.nationality, 
         "email": self.email, "phone": self.phone, "flightNumber":self.flightNumber, "departureDate": self.departureDate,
-        # "departureTime": self.departureTime, 
-        "departureCity": self.departureCity, "arrivalCity": self.arrivalCity, "flightClass": self.flightClass, 
-        "baggage": self.baggage, "price": self.price, "bookingStatus": self.bookingStatus}
+        "departureCity": self.departureCity, "arrivalCity": self.arrivalCity, 
+        "departureTime": self.departureTime,
+        "arrivalTime":self.arrivalTime,
+         "price": self.price, "bookingStatus": self.bookingStatus}
 
 # get all bookings from db
 @app.route("/booking")

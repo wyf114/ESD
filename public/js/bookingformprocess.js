@@ -95,11 +95,11 @@ function confirmBooking() {
             body: JSON.stringify(
                 {
                     "flightNumber": flightNumber,
-                    "departTime": departTime,
-                    "arriveTime": arriveTime,
-                    "originCode": originCode,
-                    "desCode": desCode,
-                    "departDate": departDate,
+                    "departureTime": departTime,
+                    "arrivalTime": arriveTime,
+                    "departureCity": originCode,
+                    "arrivalCity": desCode,
+                    "departureDate": departDate,
                     "price": price,
                     "lastname": lastName,
                     "firstname": firstName,
