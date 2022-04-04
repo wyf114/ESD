@@ -10,12 +10,11 @@ import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # check os and change sql setting respectively
 # my_os=sys.platform
 # if my_os == "darwin":
-#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
 # elif my_os == "win32" or my_os == "win64":
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
 
@@ -43,14 +42,14 @@ class Booking(db.Model):
     departureDate = db.Column(db.Date, nullable = False)
     departureCity = db.Column(db.String(100), nullable=False)
     arrivalCity = db.Column(db.String(100), nullable=False) 
-    departureTime = db.Column(db.Time, nullable=False) 
-    arrivalTime = db.Column(db.Time, nullable=False) 
+    departureTime = db.Column(db.String(100), nullable=False) 
+    arrivalTime = db.Column(db.String(100), nullable=False) 
     flightNumber2 = db.Column(db.String(50), nullable=False)
     departureDate2 = db.Column(db.Date, nullable = False)
     departureCity2 = db.Column(db.String(100), nullable=False)
     arrivalCity2 = db.Column(db.String(100), nullable=False) 
-    departureTime2 = db.Column(db.Time, nullable=False) 
-    arrivalTime2 = db.Column(db.Time, nullable=False) 
+    departureTime2 = db.Column(db.String(100), nullable=False) 
+    arrivalTime2 = db.Column(db.String(100), nullable=False) 
     price = db.Column(db.Float, nullable=False) 
     bookingStatus = db.Column(db.String(50), nullable=False)
 
@@ -99,13 +98,11 @@ def get_all():
     print(bookingList)
     if len(bookingList):
         # Time format cannot be JSON serializable, so add this time to enforce it to be serialised
-        bookingList = json.dumps(bookingList, default=str)
-
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "bookings": [booking for booking in bookingList]
+                    "bookings": [booking.json() for booking in bookingList]
                 }
             }
         )
@@ -123,12 +120,12 @@ def find_by_condition(condition):
         myBookingList = Booking.query.filter_by(email=condition).all()
         if len(myBookingList):
             # myBookingList = json.dumps(myBookingList, default=str)
-            # print(myBookingList)
+            print(myBookingList)
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "bookings": [json.dumps(booking, default=str) for booking in myBookingList]
+                        "bookings": [booking.json() for booking in myBookingList]
                     }
                 }
             )
@@ -141,11 +138,11 @@ def find_by_condition(condition):
     else:
         booking = Booking.query.filter_by(bookingId=condition).first()
         if booking:
-            booking = json.dumps(booking, default=str)
+            # booking = json.dumps(booking, default=str)
             return jsonify(
                 {
                     "code": 200,
-                    "data": booking
+                    "data": booking.json()
                 }
             )
         return jsonify(
@@ -217,11 +214,11 @@ def update_booking(bookingId):
             }
         ), 500
     
-    booking = json.dumps(booking, default=str)
+    # booking = json.dumps(booking, default=str)
     return jsonify(
         {
             "code": 201,
-            "data": booking
+            "data": booking.json()
         }
     ), 201
 
