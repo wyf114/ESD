@@ -12,11 +12,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # check os and change sql setting respectively
-my_os=sys.platform
-if my_os == "darwin":
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
-elif my_os == "win32" or my_os == "win64":
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
+# my_os=sys.platform
+# if my_os == "darwin":
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/booking'
+# elif my_os == "win32" or my_os == "win64":
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/booking'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -33,7 +33,7 @@ class Booking(db.Model):
     passport = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     firstname = db.Column(db.String(100), nullable=False)
-    dob = db.Column(db.String(20), nullable=False)
+    dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     nationality = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), nullable=False)
@@ -172,6 +172,36 @@ def create_booking(bookingId):
             "data": booking.json()
         }
     ), 201
+
+# update booking by bookingId
+@app.route("/booking/<string:bookingId>", methods=['PUT'])
+def update_booking(bookingId):
+    booking = Booking.query.filter_by(bookingId=bookingId).first()
+    if booking:
+        print(booking)
+        bookingStatus = request.get_json(force=True)
+        print("data is " + format(bookingStatus))
+        booking.bookingStatus = bookingStatus["bookingStatus"]
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "bookingId": bookingId
+                },
+                "message": "An error occurred updating the booking."
+            }
+        ), 500
+    # print(booking.json())
+    return jsonify(
+        {
+            "code": 201,
+            "data": booking.json()
+        }
+    ), 201
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)

@@ -9,7 +9,6 @@ import json
 from os import environ
 import amqp_setup
 import pika
-import json
 
 
 app = Flask(__name__)
@@ -19,13 +18,7 @@ booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
 passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
 # activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"
 # error_URL = environ.get('error_URL') or "http://localhost:5004/error"
-# passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
-
-
-
-# email_URL = 
-#validation_URL = 
-#...
+validation_URL = environ.get('validation_URL') or "http://localhost:5002/validation"
 
 @app.route("/make_booking", methods=['POST'])
 def make_booking():
@@ -35,11 +28,19 @@ def make_booking():
             booking = request.get_json(force=True)
             print("\nReceived a booking in JSON:", booking)
 
-            # Get booking info {booking ID}
-            result = processMemberBooking(booking)
-            print('\n------------------------')
-            print('\nresult: ', result)
-            return jsonify(result), result["code"]
+            # for validating payment info
+            if "payment_id" in booking:
+                result = processPayment(booking)
+                print('\n------------------------')
+                print('\nresult: ', result)
+                return jsonify(result), result["code"]
+            # for processing booking info
+            else:
+                # Get booking info {booking ID}
+                result = processMemberBooking(booking)
+                print('\n------------------------')
+                print('\nresult: ', result)
+                return jsonify(result), result["code"]
 
         except Exception as e:
             # Unexpected error
@@ -167,7 +168,39 @@ def updatePassengerInfo(booking):
             "check_passenger": check_passenger
         },
         "message": "Passenger record exists."
-    }    
+    }   
+
+
+def processPayment(booking):
+    print('\n-----Invoking Validation microservice-----')
+
+    # add passenger + flight info into booking db (hardcode for now)
+    print('Payment info:', booking)
+    update_booking = invoke_http(booking_URL, method='POST', json=booking)
+
+    # Check the booking result; if a failure, send it to the error microservice.
+    code = update_booking["code"]
+
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (booking update error) message with routing_key=bookingUpdate.error-----')
+        message = json.dumps(update_booking)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="bookingUpdate.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2))
+
+        print("\nBooking update status ({:d}) published to the RabbitMQ Exchange:".format(code), update_booking)
+
+        # Return error
+        return {
+            "code": 400,
+            "data": {
+                "update_booking": update_booking
+            },
+            "message": "Booking update record error sent for error handling."
+        }
+
+
+
 
 
 if __name__ == "__main__":
