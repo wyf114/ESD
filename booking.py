@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_cors import CORS
 import sys
 from os import environ
+import json
 
 
 app = Flask(__name__)
@@ -40,11 +41,10 @@ class Booking(db.Model):
     phone = db.Column(db.String(50), nullable=False)
     flightNumber = db.Column(db.String(50), nullable=False)
     departureDate = db.Column(db.Date, nullable = False)
-    # departureTime = db.Column(db.TIMESTAMP, nullable = False)
     departureCity = db.Column(db.String(100), nullable=False)
     arrivalCity = db.Column(db.String(100), nullable=False) 
-    departureTime = db.Column(db.String(100), nullable=False) 
-    arrivalTime = db.Column(db.String(100), nullable=False) 
+    departureTime = db.Column(db.Time, nullable=False) 
+    arrivalTime = db.Column(db.Time, nullable=False) 
     price = db.Column(db.Float, nullable=False) 
     bookingStatus = db.Column(db.String(50), nullable=False)
 
@@ -83,11 +83,14 @@ def get_all():
     bookingList = Booking.query.all()
     print(bookingList)
     if len(bookingList):
+        # Time format cannot be JSON serializable, so add this time to enforce it to be serialised
+        bookingList = json.dumps(bookingList, default=str)
+
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "bookings": [booking.json() for booking in bookingList]
+                    "bookings": [booking for booking in bookingList]
                 }
             }
         )
@@ -104,11 +107,12 @@ def find_by_condition(condition):
     if "@" in condition:
         myBookingList = Booking.query.filter_by(email=condition).all()
         if len(myBookingList):
+            bookingList = json.dumps(bookingList, default=str)
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "bookings": [booking.json() for booking in myBookingList]
+                        "bookings": [booking for booking in myBookingList]
                     }
                 }
             )
@@ -121,10 +125,11 @@ def find_by_condition(condition):
     else:
         booking = Booking.query.filter_by(bookingId=condition).first()
         if booking:
+            booking = json.dumps(booking, default=str)
             return jsonify(
                 {
                     "code": 200,
-                    "data": booking.json()
+                    "data": booking
                 }
             )
         return jsonify(
@@ -166,10 +171,11 @@ def create_booking(bookingId):
             }
         ), 500
 
+    booking = json.dumps(booking, default=str)
     return jsonify(
         {
             "code": 201,
-            "data": booking.json()
+            "data": booking
         }
     ), 201
 
@@ -194,11 +200,12 @@ def update_booking(bookingId):
                 "message": "An error occurred updating the booking."
             }
         ), 500
-    # print(booking.json())
+    
+    booking = json.dumps(booking, default=str)
     return jsonify(
         {
             "code": 201,
-            "data": booking.json()
+            "data": booking
         }
     ), 201
 

@@ -9,6 +9,7 @@ import json
 from os import environ
 import amqp_setup
 import pika
+import re
 
 
 app = Flask(__name__)
@@ -68,7 +69,9 @@ def processMemberBooking(booking):
     print('Booking summary:', booking)
     passport = booking["passport"]
     flightNumber = booking["flightNumber"]
-    bookingId = passport+flightNumber
+    bookingId = flightNumber+passport
+    bookingId = re.sub(r"[^a-zA-Z0-9]","",bookingId)
+    booking["bookingStatus"] = "Pending"
     create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking)
 
     # Check the booking result; if a failure, send it to the error microservice.

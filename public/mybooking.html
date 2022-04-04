@@ -155,7 +155,7 @@ fetch(`${get_all_bookings_URL}/${email}`)
                 let departureDate = booking_obj[i].departureDate
                 let departureCity = booking_obj[i].departureCity       
                 let arrivalCity = booking_obj[i].arrivalCity
-                let flightClass = booking_obj[i].flightClass         
+                // let flightClass = booking_obj[i].flightClass         
 
                 str += `<p>Booking ${i+1}</p>
                     <p>Last Name: ${lastname}</p>
@@ -167,7 +167,6 @@ fetch(`${get_all_bookings_URL}/${email}`)
                     <p>Departure Date: ${departureDate}</p>
                     <p>Departure City: ${departureCity}</p>
                     <p>Arrival City: ${arrivalCity}</p>
-                    <p>Class: ${flightClass}</p>
                 </div>`
                 info.innerHTML = str;
             }
