@@ -1,7 +1,7 @@
 function showPassenger() {
-    // let email = document.getElementById("emailTxt").textContent;
+    let email = document.getElementById("emailTxt").textContent;
     // email="tianjingsun.2020@smu.edu.sg"
-    email = "wyf102@gmail.com";
+    // email = "wyf102@gmail.com";
     console.log(email);
     let passenger_URL = "http://localhost:5000/passenger"
     const response =
@@ -16,27 +16,25 @@ function showPassenger() {
                     passenger_info = [data.data];
                     console.log(data);
                     console.log(passenger_info);
-                    
+
                 }
                 let lastName = document.getElementById("lastname");
                 let firstName = document.getElementById("firstname");
                 let nationality = document.getElementById("nationality");
                 let dob = document.getElementById("dob");
                 let passport = document.getElementById("passport");
-                let email = document.getElementById("email");
                 let phone = document.getElementById("phone");
                 let female = document.getElementById("female");
                 let male = document.getElementById("male");
-                lastName.value=passenger_info[0].lastname;
-                firstName.value=passenger_info[0].firstname;
-                nationality.value=passenger_info[0].nationality;
-                dob.value=passenger_info[0].dob;
-                passport.value=passenger_info[0].passport;
-                email.value=passenger_info[0].email;
-                phone.value=passenger_info[0].phone;
-                if(passenger_info[0].gender="Female"){
+                lastName.value = passenger_info[0].lastname;
+                firstName.value = passenger_info[0].firstname;
+                nationality.value = passenger_info[0].nationality;
+                dob.value = passenger_info[0].dob;
+                passport.value = passenger_info[0].passport;
+                phone.value = passenger_info[0].phone;
+                if (passenger_info[0].gender = "Female") {
                     female.checked = true;
-                }else{
+                } else {
                     male.checked = true;
                 }
             })
@@ -46,7 +44,7 @@ function showPassenger() {
                 console.log(error);
 
             });
-            
+
     console.log(localStorage.getItem("fromFlightInfo").split(","));
     console.log(localStorage.getItem("toFlightInfo").split(","));
     let fromFlightInfo = localStorage.getItem("fromFlightInfo").split(",");
@@ -72,14 +70,6 @@ function showPassenger() {
 
 function confirmBooking() {
 
-    let login = localStorage.getItem("loginID");
-    if (login==null){
-    window.alert("Please Sign in via Google!")
-    return
-    }
-
-    
-
 
     let flightNumber = document.getElementById("flightNumber").textContent;
     let departTime = document.getElementById("departTime").textContent;
@@ -98,21 +88,48 @@ function confirmBooking() {
     let price = document.getElementById("price").textContent;
     let lastName = document.getElementById("lastname").value;
     let firstName = document.getElementById("firstname").value;
-    let genderList = document.getElementsByName("gender");
-    for (var g of genderList) {
-        if (g.checked) {
-            gender = g.value;
-        }
-    }
-    console.log(gender);
+    // console.log(gender);
     let nationality = document.getElementById("nationality").value;
     let dob = document.getElementById("dob").value;
     let passport = document.getElementById("passport").value;
-    let email = document.getElementById("email").value;
+    let email = document.getElementById("emailTxt").textContent;
+    console.log(email);
     let phone = document.getElementById("phone").value;
-    var paymentInfo=[price,email];
+    let genderList = document.getElementsByName("gender");
+    let valiTxt = document.getElementById("valiTxt");
+    var genderchecked = [];
+    for (var g of genderList) {
+        if (g.checked) {
+            gender = g.value;
+            genderchecked.push(g.value);
+        }
+    }
+    var paymentInfo = [price, email];
     localStorage.setItem("paymentInfo", paymentInfo);
     console.log(localStorage.getItem("paymentInfo"));
+    if (lastName == '') {
+        
+        valiTxt.innerHTML = "Please enter your last name.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    } else if (firstName == '') {
+        valiTxt.innerHTML = "Please enter your first name.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    }else if (genderchecked.length == 0) {
+        valiTxt.innerHTML = "Please enter your gender.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    }else if (nationality == '') {
+        valiTxt.innerHTML = "Please enter your nationality.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    } else if (dob == '') {
+        valiTxt.innerHTML = "Please enter your date of birth.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    } else if (passport == '') {
+        valiTxt.innerHTML = "Please enter your passport.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    } else if (phone == '') {
+        valiTxt.innerHTML = "Please enter your phone.";
+        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+    }else{
     let makeBooking_URL = "http://localhost:5100/make_booking";
     fetch(makeBooking_URL,
         {
@@ -149,12 +166,21 @@ function confirmBooking() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            result = data.data;
-            console.log(result);
-
+            code = data.code;
+            console.log(code);
+            if (code == 500) {
+                valiTxt.innerHTML = "Booking Not Successful.";
+                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+            } else if (code == 400) {
+                valiTxt.innerHTML = "Booking Existed.";
+                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+            }else{
+                window.location.href = "./payment.html";
+            }
         })
         .catch(error => {
             console.log("Problem in making a booking. " + error);
         })
+}
 }
 
