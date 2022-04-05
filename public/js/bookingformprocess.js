@@ -1,7 +1,7 @@
 function showPassenger() {
-    // let email = document.getElementById("emailTxt").textContent;
+    let email = document.getElementById("emailTxt").textContent;
     // email="tianjingsun.2020@smu.edu.sg"
-    email = "wyf102@gmail.com";
+    // email = "wyf102@gmail.com";
     console.log(email);
     let passenger_URL = "http://localhost:5000/passenger"
     const response =
@@ -23,7 +23,6 @@ function showPassenger() {
                 let nationality = document.getElementById("nationality");
                 let dob = document.getElementById("dob");
                 let passport = document.getElementById("passport");
-                let email = document.getElementById("email");
                 let phone = document.getElementById("phone");
                 let female = document.getElementById("female");
                 let male = document.getElementById("male");
@@ -32,7 +31,6 @@ function showPassenger() {
                 nationality.value=passenger_info[0].nationality;
                 dob.value=passenger_info[0].dob;
                 passport.value=passenger_info[0].passport;
-                email.value=passenger_info[0].email;
                 phone.value=passenger_info[0].phone;
                 if(passenger_info[0].gender="Female"){
                     female.checked = true;
@@ -98,7 +96,8 @@ function confirmBooking() {
     let nationality = document.getElementById("nationality").value;
     let dob = document.getElementById("dob").value;
     let passport = document.getElementById("passport").value;
-    let email = document.getElementById("email").value;
+    let email = document.getElementById("emailTxt").textContent;
+    console.log(email);
     let phone = document.getElementById("phone").value;
     var paymentInfo=[price,email];
     localStorage.setItem("paymentInfo", paymentInfo);

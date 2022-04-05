@@ -127,8 +127,9 @@ console.log("email", email)
 const get_all_bookings_URL = "http://localhost:5001/booking";
 const response = 
 fetch(`${get_all_bookings_URL}/${email}`)
-        .then(response => response.json())
+        .then( response => response.json())
         .then(data => {
+            
             console.log(data);
             if (data.code === 404) {
                 // no booking in db
@@ -187,13 +188,13 @@ fetch(`${get_all_bookings_URL}/${email}`)
                 </div>`
                 info.innerHTML = str;
             }
-        
-        })
-        .catch(error => {
+            })
+
+            .catch(error=> {
             // Errors when calling the service; such as network error, 
             // service offline, etc
             console.log(error);
-        });
+        })
 }
 
 </script>
