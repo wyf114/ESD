@@ -1,7 +1,11 @@
 from flask import Flask, render_template, jsonify, request
+import requests 
 import paypalrestsdk
+from os import environ
 
 app = Flask(__name__)
+booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
+
 
 paypalrestsdk.configure({
   "mode": "sandbox", # sandbox or live
@@ -35,6 +39,7 @@ def payment():
                 "total": "10.00",
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
+    
 
     if payment.create():
         
@@ -46,7 +51,7 @@ def payment():
 
 @app.route('/execute', methods=['POST'])
 def execute():
-    global success 
+    # global success 
     success = False
 
     payment = paypalrestsdk.Payment.find(request.form['paymentID'])
@@ -59,6 +64,10 @@ def execute():
 
     return jsonify({'success' : success})
 
+print(payment)
+
 if __name__ == '__main__':
     # app.run(debug=True)
     app.run(host="0.0.0.0", port=5003, debug=True)
+
+requests.post("http://localhost:5100/make_booking",data ={"status":"success"})
