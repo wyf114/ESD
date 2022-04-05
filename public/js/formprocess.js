@@ -1,4 +1,7 @@
 function loadResultsPage() {
+    let bodyTxt=document.getElementById("bodyTxt")
+    bodyTxt.innerHTML="Please wait we are searching the flight for you......"
+    setTimeout(() => { bodyTxt.innerHTML = "" }, 2000);
     let link = window.location.href
     let firstNum = link.search("html")
     let jsonStr = link.slice(firstNum+6)
@@ -28,7 +31,6 @@ function loadResultsPage() {
 
                 returnStr += `
                 <div class="search-results">
-
                     <div class="tm-recommended-description-box">
                         <h3 class="tm-recommended-title" id="flightNumber${returnCount}">${ret.legs[0].operatingAirline.code}${ret.legs[0].flightNumber}</h3>
                         <p class="tm-text-highlight"><span id="departTime${returnCount}">${ret.departureDateTime.slice(11,16)}</span> -<span id="arriveTime${returnCount}">${ret.arrivalDateTime.slice(11,16)}${nextDay}</span></br>

@@ -69,7 +69,8 @@ def processMemberBooking(booking):
     print('Booking summary:', booking)
     passport = booking["passport"]
     flightNumber = booking["flightNumber"]
-    bookingId = flightNumber+passport
+    departureDate = booking["departureDate"]
+    bookingId = flightNumber+passport+departureDate
     bookingId = re.sub(r"[^a-zA-Z0-9]","",bookingId)
     booking["bookingStatus"] = "Pending"
     create_booking = invoke_http(booking_URL + "/" + bookingId, method='POST', json=booking)
