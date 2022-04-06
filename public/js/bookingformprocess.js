@@ -167,10 +167,13 @@ function confirmBooking() {
                 try {
                     const data = await response.json();
                     console.log(data);
+                    let bookingInfo=data.data.create_booking.data.bookingId;
+                    console.log(bookingInfo);
+                    localStorage.setItem('bookingInfo',bookingInfo);
                     code = data.code;
                     console.log(code);
                     if (code < 300 && code >= 200) {
-                        window.location.href = "../Templates/payment.html";
+                        window.location.href = "./payment.html";
                     }else if (code == 410) {
                         valiTxt.innerHTML = "Booking Existed.";
                         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
