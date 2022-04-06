@@ -37,8 +37,11 @@ def validateBooking(payment_info):
     bookingId = payment_info['bookingId']
     paymentStatus = payment_info['paymentStatus']
     if paymentStatus == "Completed":
-        updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=paymentStatus)
+        payment_info['paymentStatus'] = "Confirmed"
+        print(payment_info)
+        updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=payment_info)
         code = updateBooking["code"]
+        print(code)
         if code not in range(200, 300):
             code = code
             message = 'Failure in booking status update.'

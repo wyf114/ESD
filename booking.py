@@ -195,11 +195,12 @@ def create_booking(bookingId):
 @app.route("/booking/<string:bookingId>", methods=['PUT'])
 def update_booking(bookingId):
     booking = Booking.query.filter_by(bookingId=bookingId).first()
+    print(booking)
     if booking:
         print(booking)
         bookingStatus = request.get_json(force=True)
         print("data is " + format(bookingStatus))
-        booking.bookingStatus = bookingStatus["bookingStatus"]
+        booking.bookingStatus = bookingStatus["paymentStatus"]
     try:
         db.session.commit()
     except:
@@ -219,7 +220,7 @@ def update_booking(bookingId):
             "code": 202,
             "data": booking.json()
         }
-    ), 201
+    ), 202
 
 
 if __name__ == '__main__':
