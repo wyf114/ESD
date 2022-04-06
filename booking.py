@@ -158,13 +158,13 @@ def create_booking(bookingId):
     if Booking.query.filter_by(bookingId=bookingId).first():
         return jsonify(
             {
-                "code": 400,
+                "code": 410,
                 "data": {
                     "bookingId": bookingId
                 },
                 "message": "Booking already exists."
             }
-        ), 400
+        ), 410
 
     data = request.get_json(force=True)
     print("data is " + format(data))

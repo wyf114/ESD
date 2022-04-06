@@ -1,7 +1,7 @@
 function showPassenger() {
-    let email = document.getElementById("emailTxt").textContent;
+    let email = localStorage.getItem('email');
     // email="tianjingsun.2020@smu.edu.sg"
-    email = "wyf102@gmail.com";
+    // email = "wyf103@gmail.com";
     console.log(email);
     let passenger_URL = "http://localhost:5000/passenger"
     const response =

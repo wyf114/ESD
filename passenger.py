@@ -90,13 +90,13 @@ def create_passenger(email):
     if Passenger.query.filter_by(email=email).first():
         return jsonify(
             {
-                "code": 400,
+                "code": 410,
                 "data": {
                     "email": email
                 },
                 "message": "Passenger already exists."
             }
-        ), 400
+        ), 410
 
     data = request.get_json(force=True)
     print("data is " + format(data))
