@@ -181,8 +181,10 @@
             var emailTxt= document.getElementById('emailTxt');
             emailTxt.innerHTML =profile.getEmail();
             var id_token = googleUser.getAuthResponse().id_token;
+            
             // console.log("ID Token: " + id_token);
             localStorage.setItem("loginID", id_token);
+            localStorage.setItem("email", profile.getEmail());
             // email.value = profile.getEmail()
 
             if (window.localStorage) {
@@ -203,6 +205,7 @@
         console.log('User signed out.');
         auth2.disconnect();
         localStorage.removeItem("loginID")
+        localStorage.removeItem("email")
         });
         }
 
