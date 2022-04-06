@@ -9,7 +9,7 @@ CORS(app)
 def index():
     return render_template('payment.html')
 
-@app.route('/processPayment/paymentData',methods=['GET', 'POST'])
+@app.route('/processPayment/paymentData',methods=['POST'])
 def processPayment():
     paymentData=request.json
     print('Payment info received')
