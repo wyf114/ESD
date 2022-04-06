@@ -16,11 +16,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # elif my_os == "win32" or my_os == "win64":
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/passenger'
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 265363b7d97fb49b540461393f7f5299b45498d7
 db = SQLAlchemy(app)
 
 CORS(app)  
@@ -67,7 +62,7 @@ def get_all():
     return jsonify(
         {
             "code": 404,
-            "message": "Oops. No passenger found."
+            "message": "Oops. No passenger in the passenger database."
         }
     ),404
 
@@ -113,13 +108,13 @@ def create_passenger(email):
     except:
         return jsonify(
             {
-                "code": 500,
+                "code": 501,
                 "data": {
                     "email": email
                 },
                 "message": "An error occurred creating the passenger."
             }
-        ), 500
+        ), 501
 
     return jsonify(
         {

@@ -51,14 +51,14 @@ def make_booking():
             print(ex_str)
 
             return jsonify({
-                "code": 500,
+                "code": 600,
                 "message": "make_booking.py internal error: " + ex_str
-            }), 500
+            }), 600
     # if not a JSON request
     return jsonify({
-        "code": 400,
+        "code": 100,
         "message": "Invalid JSON input: " + str(request.get_data())
-    }), 400
+    }), 100
 
 
 def processMemberBooking(booking):
@@ -135,11 +135,11 @@ def updatePassengerInfo(booking):
                 print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), add_passenger)
                 # Return error
                 return {
-                    "code": 400,
+                    "code": add_passenger["code"],
                     "data": {
                         "add_passenger": add_passenger
                     },
-                    "message": "Add passenger record error sent for error handling."
+                    "message": message
                     }
             # Return created passenger record
             return {
@@ -158,11 +158,11 @@ def updatePassengerInfo(booking):
             print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), check_passenger)
             # Return error
             return {
-                "code": 400,
+                "code": code,
                 "data": {
                     "check_passenger": check_passenger
                 },
-                "message": "Passenger record error sent for error handling."
+                "message": message
                 }
 
     # Return checking record

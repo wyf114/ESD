@@ -109,7 +109,7 @@ def get_all():
     return jsonify(
         {
             "code": 404,
-            "message": "Oops. No booking found."
+            "message": "Oops. No booking found in the booking database."
         }
     ),404
 
@@ -132,7 +132,7 @@ def find_by_condition(condition):
         return jsonify(
             {
                 "code": 404,
-                "message": "Oops. No booking found."
+                "message": "No booking found by this email."
             }
         ),404
     else:
@@ -148,7 +148,7 @@ def find_by_condition(condition):
         return jsonify(
             {
                 "code": 404,
-                "message": "Booking not found."
+                "message": "No booking found by this bookingId."
             }
         ), 404
 
@@ -176,13 +176,13 @@ def create_booking(bookingId):
     except:
         return jsonify(
             {
-                "code": 500,
+                "code": 501,
                 "data": {
                     "bookingId": bookingId
                 },
                 "message": "An error occurred creating the booking."
             }
-        ), 500
+        ), 501
 
     booking = json.dumps(booking, default=str)
     return jsonify(
@@ -206,18 +206,18 @@ def update_booking(bookingId):
     except:
         return jsonify(
             {
-                "code": 500,
+                "code": 502,
                 "data": {
                     "bookingId": bookingId
                 },
                 "message": "An error occurred updating the booking."
             }
-        ), 500
+        ), 502
     
     # booking = json.dumps(booking, default=str)
     return jsonify(
         {
-            "code": 201,
+            "code": 202,
             "data": booking.json()
         }
     ), 201

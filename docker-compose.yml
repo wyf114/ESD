@@ -111,9 +111,9 @@ services:
     ports:
       - "5100:5100"
 
-############################################
-# Selection: The Selection microservice
-############################################
+  ############################################
+  # Selection: The Selection microservice
+  ############################################
   selection:
     build:
       context: ./selection
