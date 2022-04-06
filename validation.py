@@ -28,30 +28,29 @@ def validation():
         print(data)
         return jsonify(
             {"code": 100,
-            # make the data string as we dunno what could be the actual format
             "data": str(data),
-            "message": "Payment info should be in JSON."}), 100  # Bad Request input
+            "message": "Payment info should be in JSON."}), 100 
 
 
 def validateBooking(payment_info):
     print("Validating the booking:", payment_info)
     bookingId = payment_info['bookingId']
-    bookingStatus = payment_info['bookingStatus']
-    # if bookingStatus == "Completed" or "Failed":
-    updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=bookingStatus)
+    paymentStatus = payment_info['paymentStatus']
+    if paymentStatus == "Completed":
+        updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=paymentStatus)
+        code = updateBooking["code"]
+        if code not in range(200, 300):
+            code = code
+            message = 'Failure in booking status update.'
+        else:  
+            code = code
+            message = 'Success in booking status update.'
 
-    # Check the update result; if a failure, send it to the error microservice.
-    code = updateBooking["code"]
-
-    if code not in range(200, 300):
-        code = code
-        message = 'Failure in booking status update.'
-    else:  # simulate success
-        code = code
-        message = 'Success in booking status update.'
-
-    print(message)
-    print()  # print a new line feed as a separator
+        print(message)
+        print()  
+    else:
+        code = 500
+        message = "Payment failed."
 
     return {
         'code': code,
