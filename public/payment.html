@@ -70,7 +70,7 @@
 
 <!-- ---payment--- -->
     <div class="container">
-        <div class="main-inner container-center">
+        <div class="main-inner container-center" id="main">
             <div class="show-message-component"></div> <!----> <!----> 
             <div><div class="heading-wrapper"><h2 class="main-heading"></h2>
 
@@ -96,21 +96,21 @@
                                     <section id="itinerary">
                                         <div class="accordion-content">
                                             <div class="itinerary-top">
-                                                <h4 class="flight-info-title"  id="flightNumber">
+                                                <h4 class="flight-info-title"  id="flightNumber">SQ706
 
                                                 <span> - </span>
-                                                <span id="originCode"></span> 
-                                                <span></span> 
-                                                <span id="desCode"></span> 
+                                                <span id="originCode">SIN</span> 
+                                                <span>to</span> 
+                                                <span id="desCode">BKK</span> 
 
         <!----> <!---->
     </div> 
     <div class="itinerary-inner">
         <!-- <span class="stop-time">Depart Date: </span>  -->
         <div class="flight-station-info">
-            Depart Date:<span id="departDate"><strong>00</strong> </span> </br>
-            Depart Time:<span id="departTime"></span> </br>
-            Arrive Time:<span id="arriveTime"></span> </br>
+            Depart Date:<span id="departDate"><strong> 2022-04-11</strong> </span> </br>
+            Depart Time:<span id="departTime"> 07:10 </span> </br>
+            Arrive Time:<span id="arriveTime"> 08:35 </span> </br>
 
         </div> 
     </div>
@@ -120,20 +120,20 @@
             <em class="ico-airplane-2"></em> <hr> 
             <span class="flight-place"></span></div> 
             <div class="airline-info">   
-        <h4 class="flight-info-title" id="flightNumber2">
+        <h4 class="flight-info-title" id="flightNumber2">SQ705
        
             <span> - </span>
-            <span id="originCode2"></span> 
-            <span></span> 
-            <span id="desCode2"></span> 
+            <span id="originCode2">BKK</span> 
+            <span>to</span> 
+            <span id="desCode2">SIN</span> 
         </h4>
         </div>
         <div class="itinerary-inner">
         <!-- <span class="stop-time">Depart Date: </span>  -->
         <div class="flight-station-info">
-            Depart Date:<span id="departDate2"><strong>00</strong> </span> </br>
-            Depart Time:<span id="departTime2"></span> </br>
-            Arrive Time:<span id="arriveTime2"></span> </br>
+            Depart Date:<span id="departDate2"><strong> 2022-04-15</strong> </span> </br>
+            Depart Time:<span id="departTime2"> 09:40</span> </br>
+            Arrive Time:<span id="arriveTime2"> 13:05</span> </br>
 
         </div> 
     </div>
@@ -142,7 +142,7 @@
     </div></div></div></section> 
 </br>
     <p class="fw-bold">Grand Total</p>
-        <p id="price" class="fw-bold" style="text-align: right; font-size: large;"><span class="fas fa-dollar-sign" ></span id='price'>[Total Amount]</p>
+        <p id="price" class="fw-bold" style="text-align: right; font-size: large;"><span class="fas fa-dollar-sign" ></span id='price'>436.2</p>
 
                         <!-- </div> -->
                         </br>
@@ -214,7 +214,7 @@ function onSignIn(googleUser) {
     },
 
     createOrder: function(data, actions) {
-        var price = 213;
+        var price = 436.2;
         return actions.order.create({
         purchase_units: [{"amount"
             :{"currency_code":"USD","value": price}}]
