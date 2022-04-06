@@ -97,7 +97,6 @@ def get_all():
     bookingList = Booking.query.all()
     print(bookingList)
     if len(bookingList):
-        # Time format cannot be JSON serializable, so add this time to enforce it to be serialised
         return jsonify(
             {
                 "code": 200,

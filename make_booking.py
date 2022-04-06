@@ -109,7 +109,7 @@ def processMemberBooking(booking):
 
 
     # add passenger info into passenger db if not exist 
-    update_passenger = updatePassengerInfo(booking)
+    update_passenger = addPassengerInfo(booking)
     message_update = json.dumps(update_passenger)
 
     # Return created booking record
@@ -126,7 +126,7 @@ def processMemberBooking(booking):
     }
 
 
-def updatePassengerInfo(booking):
+def addPassengerInfo(booking):
     # check if the passenger info exists in the passenger db
     email = booking["email"]
     passenger_info = {}
