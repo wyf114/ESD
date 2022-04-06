@@ -17,7 +17,7 @@ services:
     build:
       context: ./
       dockerfile: booking.Dockerfile
-    image: tianjing1/booking:esd
+    image: wyf114/booking:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/booking
@@ -33,7 +33,7 @@ services:
     build:
       context: ./
       dockerfile: passenger.Dockerfile
-    image: tianjing1/passenger:esd
+    image: wyf114/passenger:esd
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/passenger
@@ -62,7 +62,7 @@ services:
     build:
       context: ./
       dockerfile: activity_log.Dockerfile
-    image: tianjing1/activity_log:esd
+    image: wyf114/activity_log:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -78,7 +78,7 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: tianjing1/error:esd
+    image: wyf114/error:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -94,7 +94,7 @@ services:
     build:
       context: ./
       dockerfile: make_booking.Dockerfile
-    image: tianjing1/make_booking:esd
+    image: wyf114/make_booking:esd
     restart: always
     depends_on:
       - booking
@@ -111,9 +111,22 @@ services:
     ports:
       - "5100:5100"
 
-  #######################################
+  ############################################
+  # Selection: The Selection microservice
+  ############################################
+  selection:
+    build:
+      context: ./selection
+      dockerfile: Dockerfile
+    image: wyf114/selection:esd
+    restart: always
+
+    ports:
+      - "8080:8080"
+
+  ################################################
   # Postgres: The database used by the project
-  #######################################
+  ################################################
   db:
     image: postgres:9.6
     restart: always
@@ -132,17 +145,4 @@ services:
       retries: 5
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-  ###################################
- # Selection: The Selection microservice
-  ###################################
-  selection:
-    build:
-      context: ./selection
-      dockerfile: Dockerfile
-    image: meganthong/selection:esd
-    restart: always
-
-    ports:
-      - "8080:8080"
 
