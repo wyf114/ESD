@@ -1,8 +1,8 @@
 
 
 function showPayment() {
-    var bookingId = localStorage.getItem('bookingInfo');
-    console.log("bookingid", (localStorage.getItem('bookingInfo')))
+    // var bookingId =(localStorage.getItem('bookingInfo'));
+    // console.log("bookingid", bookingId)
     
 
     var paymentData = JSON.parse(localStorage.getItem("paymentData"))
@@ -13,7 +13,7 @@ function showPayment() {
     console.log("paymentId", typeof (paymentId))
     // var email=localStorage.getItem("email");
     // console.log(localStorage.getItem("email"));
-    // var bookingId = 'MF5045Y12345678';
+    var bookingId = 'MF5045Y12345678';
     
     let makeBooking_URL = "http://localhost:5100/make_booking";
     fetch(makeBooking_URL,
@@ -44,26 +44,26 @@ function showPayment() {
 
 
 
-let fromFlightInfo = localStorage.getItem("fromFlightInfo").split(",");
-    let toFlightInfo = localStorage.getItem("toFlightInfo").split(",");
+// let fromFlightInfo = localStorage.getItem("fromFlightInfo").split(",");
+//     let toFlightInfo = localStorage.getItem("toFlightInfo").split(",");
 
-    console.log(localStorage.getItem("fromFlightInfo").split(","));
-    console.log(localStorage.getItem("toFlightInfo").split(","));
-    // console.log(fromFlightInfo[4])
-    document.getElementById("flightNumber").innerHTML = fromFlightInfo[0];
-    document.getElementById("departTime").innerHTML = fromFlightInfo[1];
-    document.getElementById("arriveTime").innerHTML = fromFlightInfo[2];
-    document.getElementById("originCode").innerHTML = fromFlightInfo[3];
-    document.getElementById("desCode").innerHTML = fromFlightInfo[4];
-    document.getElementById("departDate").innerHTML = fromFlightInfo[5];
-    document.getElementById("price").innerHTML = fromFlightInfo[6];
+//     console.log(localStorage.getItem("fromFlightInfo").split(","));
+//     console.log(localStorage.getItem("toFlightInfo").split(","));
+//     // console.log(fromFlightInfo[4])
+//     document.getElementById("flightNumber").innerHTML = fromFlightInfo[0];
+//     document.getElementById("departTime").innerHTML = fromFlightInfo[1];
+//     document.getElementById("arriveTime").innerHTML = fromFlightInfo[2];
+//     document.getElementById("originCode").innerHTML = fromFlightInfo[3];
+//     document.getElementById("desCode").innerHTML = fromFlightInfo[4];
+//     document.getElementById("departDate").innerHTML = fromFlightInfo[5];
+//     document.getElementById("price").innerHTML = fromFlightInfo[6];
 
-    document.getElementById("flightNumber2").innerHTML = toFlightInfo[0];
-    document.getElementById("departTime2").innerHTML = toFlightInfo[1];
-    document.getElementById("arriveTime2").innerHTML = toFlightInfo[2];
-    document.getElementById("originCode2").innerHTML = toFlightInfo[3];
-    document.getElementById("desCode2").innerHTML = toFlightInfo[4];
-    document.getElementById("departDate2").innerHTML = toFlightInfo[5];
+//     document.getElementById("flightNumber2").innerHTML = toFlightInfo[0];
+//     document.getElementById("departTime2").innerHTML = toFlightInfo[1];
+//     document.getElementById("arriveTime2").innerHTML = toFlightInfo[2];
+//     document.getElementById("originCode2").innerHTML = toFlightInfo[3];
+//     document.getElementById("desCode2").innerHTML = toFlightInfo[4];
+//     document.getElementById("departDate2").innerHTML = toFlightInfo[5];
 
 
 
