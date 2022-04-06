@@ -16,7 +16,7 @@ CORS(app)
 booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
 
 @app.route("/validation", methods=['POST'])
-def receivePayment():
+def validation():
     # Check if the order contains valid JSON
     if request.is_json:
         payment_info = request.get_json(force=True)
@@ -29,18 +29,16 @@ def receivePayment():
         print("Received an invalid order:")
         print(data)
         return jsonify(
-            {"code": 400,
+            {"code": 100,
             # make the data string as we dunno what could be the actual format
             "data": str(data),
-            "message": "Payment info should be in JSON."}), 400  # Bad Request input
+            "message": "Payment info should be in JSON."}), 100  # Bad Request input
 
 
 def validateBooking(payment_info):
     print("Validating the booking:", payment_info)
-    # assume to receive a JSON like {payment_id:xxx, email: xxx, status: xxx, bookingId:xxx}
     bookingId = payment_info['bookingId']
     bookingStatus = payment_info['bookingStatus']
-    # If customer id contains "ERROR", simulate failure
     # if bookingStatus == "Completed" or "Failed":
     updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=bookingStatus)
 
@@ -48,10 +46,10 @@ def validateBooking(payment_info):
     code = updateBooking["code"]
 
     if code not in range(200, 300):
-        code = 400
+        code = code
         message = 'Failure in booking status update.'
     else:  # simulate success
-        code = 201
+        code = code
         message = 'Success in booking status update.'
 
     print(message)

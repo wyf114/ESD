@@ -197,7 +197,7 @@ def processPayment(booking):
 
     # add passenger + flight info into booking db (hardcode for now)
     print('Payment info:', booking)
-    update_booking = invoke_http(booking_URL, method='POST', json=booking)
+    update_booking = invoke_http(validation_URL, method='POST', json=booking)
 
     # Check the booking result; if a failure, send it to the error microservice.
     code = update_booking["code"]
@@ -213,12 +213,21 @@ def processPayment(booking):
 
         # Return error
         return {
-            "code": 400,
+            "code": code,
             "data": {
                 "update_booking": update_booking
             },
             "message": "Booking update record error sent for error handling."
         }
+
+    # Return validation result
+    return {
+        "code": code,
+        "data": {
+            "update_booking": update_booking
+        },
+        "message": message
+    }   
 
 
 
