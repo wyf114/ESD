@@ -147,6 +147,7 @@
             var id_token = googleUser.getAuthResponse().id_token;
             // console.log("ID Token: " + id_token);
             localStorage.setItem("loginID", id_token);
+            localStorage.setItem("email", profile.getEmail());
             }
 
         function signOut() {

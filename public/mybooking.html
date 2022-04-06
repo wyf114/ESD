@@ -110,6 +110,7 @@ function onSignIn(googleUser) {
     // ---------don't delete this part!!------
     var emailTxt= document.getElementById('emailTxt');
     emailTxt.innerHTML =profile.getEmail();
+    localStorage.setItem("email", profile.getEmail());
     // var element = document.getElementById('email')
     // element.innerText = profile.getEmail()
     // var email = document.getElementById('email').innerText
@@ -125,8 +126,8 @@ function signOut() {
 
 // booking history
 function retriveBooking(){
-    let email = document.getElementById("emailTxt").textContent;
-    
+    // let email = document.getElementById("emailTxt").textContent;
+    let email = localStorage.getItem('email');
     console.log(document.getElementById("emailTxt"));
     const get_all_bookings_URL = "http://localhost:5001/booking";
     const response = 

@@ -169,18 +169,19 @@ function confirmBooking() {
             console.log(data);
             code = data.code;
             console.log(code);
-            if(code== 404){
+            valiTxt.innerHTML =data.message;
+            // if(code== 404){
                 
-            }
-            else if (code == 500) {
-                valiTxt.innerHTML = "Booking Not Successful.";
-                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            } else if (code == 400) {
-                valiTxt.innerHTML = "Booking Existed.";
-                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            }else{
-                window.location.href = "../Templates/payment.html";
-            }
+            // }
+            // else if (code == 500) {
+            //     valiTxt.innerHTML = "Booking Not Successful.";
+            //     setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+            // } else if (code == 400) {
+            //     valiTxt.innerHTML = "Booking Existed.";
+            //     setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+            // }else{
+            //     window.location.href = "../Templates/payment.html";
+            // }
         }
         catch(error) {
             console.log("Problem in making a booking. " + error);
