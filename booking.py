@@ -22,7 +22,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-CORS(app)  
+CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
+                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
 
 
 ################## to be done #############

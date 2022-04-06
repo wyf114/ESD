@@ -13,8 +13,8 @@ import re
 
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
+                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
 booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
 passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger"
 # activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"

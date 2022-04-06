@@ -65,7 +65,7 @@ function retriveBooking(){
                         <p>Arrival City: ${arrivalCity2}</p>
                         <p>Departure Time: ${departureTime2}</p>
                         <p>Arrival Time: ${arrivalTime2}</p>
-                        <p>Price: ${bookingId}</p>
+                        <p>Price: ${price}</p>
                     </div> <input class="btn btn-primary mt-2" onclick = "onCancel(${i})" value="Cancel booking"/>`
                     info.innerHTML = str;
                 }

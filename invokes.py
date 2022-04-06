@@ -1,5 +1,9 @@
 import requests
-
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+app = Flask(__name__)
+CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
+                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
 SUPPORTED_HTTP_METHODS = set([
     "GET", "OPTIONS", "HEAD", "POST", "PUT", "PATCH", "DELETE"
 ])

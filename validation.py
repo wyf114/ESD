@@ -6,10 +6,11 @@ import os, sys
 import requests
 import json
 from os import environ
-
-
 app = Flask(__name__)
-CORS(app)
+CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
+                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
+
+
 
 booking_URL = environ.get('booking_URL') or "http://localhost:5001/booking"
 

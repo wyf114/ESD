@@ -130,6 +130,9 @@ function confirmBooking() {
         valiTxt.innerHTML = "Please enter your phone.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
     } else {
+        var bookingInfo=flightNumber+passport+departDate
+        localStorage.setItem('bookingInfo',bookingInfo);
+        console.log(bookingInfo);
         let makeBooking_URL = "http://localhost:5100/make_booking";
         fetch(makeBooking_URL,
             {
@@ -169,7 +172,7 @@ function confirmBooking() {
                     console.log(data);
                     let bookingInfo=data.data.create_booking.data.bookingId;
                     console.log(bookingInfo);
-                    localStorage.setItem('bookingInfo',bookingInfo);
+                    // localStorage.setItem('bookingInfo',bookingInfo);
                     code = data.code;
                     console.log(code);
                     if (code < 300 && code >= 200) {
