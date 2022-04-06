@@ -79,10 +79,14 @@ function retriveBooking(){
     }
 
     function onCancel(counter){
+<<<<<<< HEAD
         let makeBooking_URL = "http://localhost:5001/booking";
+=======
+        let booking_URL = "http://localhost:5001/booking";
+>>>>>>> b927f671aea31d2d001816e1709a494b186ebd49
         let bookingId = document.getElementById(`bookingId${counter}`).textContent;
         console.log(bookingId);
-    fetch(makeBooking_URL,
+    fetch(`${booking_URL}/${bookingId}`,
         {
             method: "PUT",
             headers: {
