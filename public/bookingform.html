@@ -175,10 +175,12 @@
             element.innerHTML = '<a href = "bookingform.html" onclick="signOut()">Sign out</a>';
 // ---------don't delete this part!!------
             var emailTxt= document.getElementById('emailTxt');
-            emailTxt.innerHTML =profile.getEmail();
+            // emailTxt.innerHTML =localStorage.getItem('email');
+            // console.log(emailTxt);
             var id_token = googleUser.getAuthResponse().id_token;
             // console.log("ID Token: " + id_token);
             localStorage.setItem("loginID", id_token);
+            localStorage.setItem("email", profile.getEmail());
             // email.value = profile.getEmail()
             }
 
@@ -189,6 +191,7 @@
             console.log('User signed out.');
             auth2.disconnect();
             localStorage.removeItem("loginID")
+            localStorage.removeItem("email")
             });
             }
         
