@@ -113,7 +113,7 @@ def get_all():
         }
     ),404
 
-# get bookings by bookingId
+# get bookings by bookingId/email
 @app.route("/booking/<string:condition>")
 def find_by_condition(condition):
     if "@" in condition:

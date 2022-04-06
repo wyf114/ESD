@@ -146,4 +146,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  ###################################
+ # Selection: The Selection microservice
+  ###################################
+  selection:
+    build:
+      context: ./selection
+      dockerfile: Dockerfile
+    image: meganthong/selection:esd
+    restart: always
+
+    ports:
+      - "8080:8080"
 

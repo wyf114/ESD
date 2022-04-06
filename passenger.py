@@ -16,6 +16,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # elif my_os == "win32" or my_os == "win64":
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/passenger'
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 265363b7d97fb49b540461393f7f5299b45498d7
 db = SQLAlchemy(app)
 
 CORS(app)  
