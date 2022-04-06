@@ -21,4 +21,5 @@ How to use:
 2. Click the Booking button, it will trigger the make_booking complex microservice to call the booking DB to store the flight info in if the record does not exist. 
 3. Your personal info will be stored into the passenger DB if it's not in it (the make_booking complex microservice will auto call the passenger microservice after creating the new booking record)
 4. You are ready for payment by clicking on the payment button
-5. you will be directed to Paypal API, click pay, and then the payment status will be sent to the complex microservice for it to update the status accordingly.
+5. you will be directed to Paypal API, click pay, and then the payment status will be sent to the complex microservice 
+6. the complex microservice will call the validation microservice to check payment result and update the status in booking DB accordingly.
