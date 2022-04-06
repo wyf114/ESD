@@ -1,3 +1,4 @@
+# sending sms from messaging service created with twilio phone number 
 import os
 from twilio.rest import Client
 
@@ -12,8 +13,9 @@ client = Client(account_sid, auth_token)
 message = client.messages \
     .create(
          messaging_service_sid='MGee106bac97b98c0326a9e3e159314ef2',
-         body='body',
-         to='+6597364576'
+         body='TEST 123 ESD FLIGHT',
+         to='+6597364576'  #my number
+
      )
 
 print(message.sid)

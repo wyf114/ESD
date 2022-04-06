@@ -108,16 +108,16 @@ function confirmBooking() {
     localStorage.setItem("paymentInfo", paymentInfo);
     console.log(localStorage.getItem("paymentInfo"));
     if (lastName == '') {
-        
+
         valiTxt.innerHTML = "Please enter your last name.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
     } else if (firstName == '') {
         valiTxt.innerHTML = "Please enter your first name.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-    }else if (genderchecked.length == 0) {
+    } else if (genderchecked.length == 0) {
         valiTxt.innerHTML = "Please enter your gender.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-    }else if (nationality == '') {
+    } else if (nationality == '') {
         valiTxt.innerHTML = "Please enter your nationality.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
     } else if (dob == '') {
@@ -129,64 +129,70 @@ function confirmBooking() {
     } else if (phone == '') {
         valiTxt.innerHTML = "Please enter your phone.";
         setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-    }else{
-    let makeBooking_URL = "http://localhost:5100/make_booking";
-    fetch(makeBooking_URL,
-        {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    "flightNumber": flightNumber,
-                    "departureTime": departTime,
-                    "arrivalTime": arriveTime,
-                    "departureCity": originCode,
-                    "arrivalCity": desCode,
-                    "departureDate": departDate,
-                    "flightNumber2": flightNumber2,
-                    "departureTime2": departTime2,
-                    "arrivalTime2": arriveTime2,
-                    "departureCity2": originCode2,
-                    "arrivalCity2": desCode2,
-                    "departureDate2": departDate2,
-                    "price": price,
-                    "lastname": lastName,
-                    "firstname": firstName,
-                    "gender": gender,
-                    "nationality": nationality,
-                    "dob": dob,
-                    "passport": passport,
-                    "email": email,
-                    "phone": phone,
+    } else {
+        let makeBooking_URL = "http://localhost:5100/make_booking";
+        fetch(makeBooking_URL,
+            {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(
+                    {
+                        "flightNumber": flightNumber,
+                        "departureTime": departTime,
+                        "arrivalTime": arriveTime,
+                        "departureCity": originCode,
+                        "arrivalCity": desCode,
+                        "departureDate": departDate,
+                        "flightNumber2": flightNumber2,
+                        "departureTime2": departTime2,
+                        "arrivalTime2": arriveTime2,
+                        "departureCity2": originCode2,
+                        "arrivalCity2": desCode2,
+                        "departureDate2": departDate2,
+                        "price": price,
+                        "lastname": lastName,
+                        "firstname": firstName,
+                        "gender": gender,
+                        "nationality": nationality,
+                        "dob": dob,
+                        "passport": passport,
+                        "email": email,
+                        "phone": phone,
 
-                })
-        })
-        .then(async response => {
-            try {
-              const data = await response.json();
-            console.log(data);
-            code = data.code;
-            console.log(code);
-            valiTxt.innerHTML =data.message;
-            // if(code== 404){
-                
-            // }
-            // else if (code == 500) {
-            //     valiTxt.innerHTML = "Booking Not Successful.";
-            //     setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            // } else if (code == 400) {
-            //     valiTxt.innerHTML = "Booking Existed.";
-            //     setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            // }else{
-            //     window.location.href = "../Templates/payment.html";
-            // }
-        }
-        catch(error) {
-            console.log("Problem in making a booking. " + error);
-        }
-})
-}
+                    })
+            })
+            .then(async response => {
+                try {
+                    const data = await response.json();
+                    console.log(data);
+                    code = data.code;
+                    console.log(code);
+                    if (code < 300 && code >= 200) {
+                        window.location.href = "../Templates/payment.html";
+                    }else if (code == 410) {
+                        valiTxt.innerHTML = "Booking Existed.";
+                        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+                    } 
+                    else if (code == 501) {
+                        valiTxt.innerHTML = "Booking Not Successful.";
+                        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+                    } else if (code == 500) {
+                        valiTxt.innerHTML = "Invalid data format.";
+                        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+                    }
+                    else {
+                        valiTxt.innerHTML = "Unsuccessful booking, please check with system admin.";
+                        setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+                    }
+                }
+                catch (error) {
+                    console.log("Problem in making a booking. " + error);
+                    valiTxt.innerHTML = "Unsuccessful booking, please check with system admin.";
+                    setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
+                }
+            })
+    }
 }
 
