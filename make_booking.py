@@ -102,7 +102,7 @@ def processMemberBooking(booking):
 
     # Return created booking record
     return {
-        "code": 201,
+        "code": code,
         "data": {
             "create_booking": create_booking
         },
