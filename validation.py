@@ -6,8 +6,6 @@ import os, sys
 import requests
 import json
 from os import environ
-import amqp_setup
-import pika
 
 
 app = Flask(__name__)
