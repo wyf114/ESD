@@ -3,7 +3,7 @@ ESD Project - Airline Web
 
 How to set up:
 1. Run "docker-compose up --build -d" after change to your own docker id
-2. Download (live server)[https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer] in Visual Studio Code
+2. Download [live server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in Visual Studio Code
 3. Configure the port to 5500 (optional, since port is 5500 by default)
 4. Click on Go Live at the bottom right corner
 5. Setup is done, you are ready to explore our Airline Website!
