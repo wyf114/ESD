@@ -20,6 +20,7 @@ passenger_URL = environ.get('passenger_URL') or "http://localhost:5000/passenger
 # activity_log_URL = environ.get('activity_log_URL') or "http://localhost:5003/activity_log"
 # error_URL = environ.get('error_URL') or "http://localhost:5004/error"
 validation_URL = environ.get('validation_URL') or "http://localhost:5002/validation"
+payment_URL = "http://localhost:5005"
 
 @app.route("/make_booking", methods=['POST'])
 def make_booking():
