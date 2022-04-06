@@ -85,7 +85,7 @@
             <div class="accordion-item vc-collapse">
                 <div id="itinerary" class="accordion-header v-collapse-toggler active">
                     <a><div class="accordion-title">Itinerary</div> 
-                        <div class="accordion-subtotal">
+                        <div class="accordion-subtotal" id="price">
                             <span>Subtotal </span> 
                             
                             <!----> <span class="sub-currency">SGD</span> <span class="sub-price">(amount)</span> 
@@ -96,38 +96,44 @@
                                     <section id="itinerary">
                                         <div class="accordion-content">
                                             <div class="itinerary-top">
-                                                <h4 class="flight-info-title">
+                                                <h4 class="flight-info-title"  id="flightNumber2">
                                                 SQ 706
                                                 <span> - </span>
-                                                Singapore to Bangkok</h4> 
+                                                <span id="originCode2">Singapore</span> 
+                                                <span>to</span> 
+                                                <span id="desCode2">Bangkok</span> 
+
         <!----> <!---->
     </div> 
     <div class="itinerary-inner">
         <!-- <span class="stop-time">Depart Date: </span>  -->
         <div class="flight-station-info">
-                <span class="depart-date"><strong>Depart Date: </strong> </span> </br>
-                <span class="depart-time">Depart Time:</span> </br>
-                <span class="arrive-time">Arrive Time: </span> </br>
+            Depart Date:<span id="departDate2"><strong>00</strong> </span> </br>
+            Depart Time:<span id="departTime2"></span> </br>
+            Arrive Time:<span id="arriveTime2"></span> </br>
 
         </div> 
     </div>
  
-    <div class="flight-stop">
+    <div class="flight-stop" >
         <span class="flight-stop-detail">
             <em class="ico-airplane-2"></em> <hr> 
             <span class="flight-place"></span></div> 
             <div class="airline-info">   
-        <h4 class="flight-info-title">
+        <h4 class="flight-info-title" id="flightNumber">
             SQ 706
             <span> - </span>
-            Bangkok to Singapore</h4> 
-
+            <span id="originCode">Singapore</span> 
+            <span>to</span> 
+            <span id="desCode">Bangkok</span> 
+        </h4>
+        </div>
         <div class="itinerary-inner">
         <!-- <span class="stop-time">Depart Date: </span>  -->
         <div class="flight-station-info">
-                <span class="depart-date">Depart Date: </span> </br>
-                <span class="depart-time">Depart Time:</span> </br>
-                <span class="arrive-time">Arrive Time: </span> </br>
+            Depart Date:<span id="departDate"><strong>00</strong> </span> </br>
+            Depart Time:<span id="departTime"></span> </br>
+            Arrive Time:<span id="arriveTime"></span> </br>
 
         </div> 
     </div>
