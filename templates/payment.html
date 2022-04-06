@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css"> <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- Bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
-    <link rel="stylesheet" href="css/templatemo-style.css"> <!-- Templatemo style -->
-    <link rel="stylesheet" href="css/bookingform.css">
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css"> <!-- Bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="../public/css/datepicker.css" />
+    <link rel="stylesheet" href="../public/css/templatemo-style.css"> <!-- Templatemo style -->
+    <link rel="stylesheet" href="../public/css/bookingform.css">
     <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <!-- Bootstrap style -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
@@ -21,7 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <meta name = "google-signin-client_id" content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="./js/paymentprocess.js"></script>
+    <script src="../public/js/paymentprocess.js"></script>
 </head>
 
 <body onload="showPayment()">
@@ -31,8 +31,8 @@
             <div class="container">
                 <div class="row">
                     <nav class="navbar navbar-expand-lg narbar-light">
-                        <a class="navbar-brand mr-auto" href="./index.html">
-                            <img src="img/logo.png" alt="Site logo">
+                        <a class="navbar-brand mr-auto" href="../public/index.html">
+                            <img src="../public/img/logo.png" alt="Site logo">
                             ESD Airline
                         </a>
                         <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse"
@@ -42,10 +42,10 @@
                         <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="./index.html">Home</a>
+                                    <a class="nav-link" href="../public/index.html">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">My booking</a>
+                                    <a class="nav-link" href="../public/mybooking.html">My booking</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Recommended Places</a>
@@ -163,72 +163,54 @@ function onSignIn(googleUser) {
         }
 
 
-    // function initPayPalButton() {
-      paypal.Buttons({
-        style: {
-          shape: 'rect',
-          color: 'gold',
-          layout: 'vertical',
-          label: 'paypal',
-          
-        },
-
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{"amount"
-              :{"currency_code":"USD","value":231}}]
-          });
-        },
-
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(orderData) {
-            
-            // Full available details
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-            console.log(typeof(orderData))
-            var paymentData = JSON.stringify(orderData, null, 2)
-            // Show a success message within this page, e.g.
-            const element = document.getElementById('paypal-button-container');
-            element.innerHTML = '';
-            element.innerHTML = '<h3>Thank you for your payment!</h3>';
-            
-            const request = new XMLHttpRequest()
-            request.open('POST', 'http://127.0.0.1:5005/processPayment/paymentData')
-            request.setRequestHeader('Access-Control-Allow-Origin', '*');
-            request.setRequestHeader('Access-Control-Allow-Methods', '*');
-            request.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.onload = () => {
-                const flaskMessage = request.responseText
-                console.log(flaskMessage)
-            }
-            request.send(paymentData)
-
-            // Or go to another URL:  actions.redirect('thank_you.html');
-
-            // window.location.replace("http://localhost:63342/tutorial/paypal/success.php")
-            
-          });
-        },
-
-        onError: function(err) {
-          console.log(err);
-          // window.location.replace("http://localhost:63342/tutorial/paypal/Oncancel.php")
-        }
-      }).render('#paypal-button-container');
-    // }
-    // initPayPalButton();
-
-    // function sendPaymentData(paymentData){
+ 
+    paypal.Buttons({
+    style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'paypal',
         
-    //     const request = new XMLHttpRequest()
-    //     request.open('POST', '/processPayment/${paymentData}')
-    //     request.onload = () => {
-    //         const flaskMessage = request.responseText
-    //         console.log(flaskMessage)
-    //     }
-    //     request.send()
-    // }
+    },
+
+    createOrder: function(data, actions) {
+        return actions.order.create({
+        purchase_units: [{"amount"
+            :{"currency_code":"USD","value":231}}]
+        });
+    },
+
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+        
+        // Full available details
+        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+        console.log(typeof(orderData))
+        var paymentData = JSON.stringify(orderData, null, 2)
+        // Show a success message within this page, e.g.
+        const element = document.getElementById('paypal-button-container');
+        element.innerHTML = '';
+        element.innerHTML = '<h3>Thank you for your payment!</h3>';
+        
+        const request = new XMLHttpRequest()
+        request.open('POST', 'http://127.0.0.1:5005/processPayment/paymentData')
+        request.setRequestHeader('Access-Control-Allow-Origin', '*');
+        request.setRequestHeader('Access-Control-Allow-Methods', '*');
+        request.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.onload = () => {
+            const flaskMessage = request.responseText
+            console.log(flaskMessage)
+        }
+        request.send(paymentData)
+
+        });
+    },
+
+    onError: function(err) {
+        console.log(err);
+    }
+    }).render('#paypal-button-container');
 
 </script>
 </body>
