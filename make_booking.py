@@ -78,13 +78,13 @@ def processMemberBooking(booking):
 
     # Check the booking result; if a failure, send it to the error microservice.
     code = create_booking["code"]
+    message = json.dumps(create_booking)
 
     amqp_setup.check_setup()
 
     if code not in range(200, 300):
         # Inform the error microservice
         print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
-        message = json.dumps(create_booking)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
@@ -197,7 +197,7 @@ def processPayment(booking):
 
     # add passenger + flight info into booking db (hardcode for now)
     print('Payment info:', booking)
-    update_booking = invoke_http(booking_URL, method='POST', json=booking)
+    update_booking = invoke_http(validation_URL, method='POST', json=booking)
 
     # Check the booking result; if a failure, send it to the error microservice.
     code = update_booking["code"]
@@ -213,12 +213,21 @@ def processPayment(booking):
 
         # Return error
         return {
-            "code": 400,
+            "code": code,
             "data": {
                 "update_booking": update_booking
             },
             "message": "Booking update record error sent for error handling."
         }
+
+    # Return validation result
+    return {
+        "code": code,
+        "data": {
+            "update_booking": update_booking
+        },
+        "message": message
+    }   
 
 
 
