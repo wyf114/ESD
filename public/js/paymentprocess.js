@@ -1,10 +1,12 @@
 function showPayment(){
-    console.log(localStorage.getItem("paymentInfo"));
-    let paymentInfo = localStorage.getItem("paymentInfo").split(",");
-    document.getElementById("price").innerHTML = paymentInfo[0];
-    document.getElementById("email").innerHTML = paymentInfo[1];
-    var email=document.getElementById("email").innerHTML;
-    console.log(document.getElementById("email"));
+    var paymentData = JSON.parse(localStorage.getItem("paymentData"))
+    // console.log('paymentdata',JSON.stringify(JSON.parse(localStorage.getItem("paymentData"))) )
+    console.log((paymentData))
+    var paymentId = paymentData.id
+    var paymentStatus = paymentData.status
+    console.log("paymentId",paymentId)
+    var email=localStorage.getItem("email");
+    console.log(localStorage.getItem("email"));
     let makeBooking_URL = "http://localhost:5100/make_booking";
     fetch(makeBooking_URL,
         {
@@ -16,6 +18,8 @@ function showPayment(){
                 {
                     
                     "email": email, 
+                    "paymentId": paymentId,
+                    "paymentStatus": paymentStatus,
                 })
         })
         .then(response => response.json())

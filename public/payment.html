@@ -147,7 +147,8 @@ function onSignIn(googleUser) {
     console.log('Name: ' + profile.getName());
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
+    localStorage.setItem("email", profile.getEmail());
+    // console.log(localStorage.getItem("email"));
     var element = document.querySelector('#gbutton')
     element.innerHTML = '<a href = "payment.html" onclick="signOut()">Sign out</a>';
 
@@ -188,42 +189,37 @@ function onSignIn(googleUser) {
         console.log(typeof(orderData))
         var paymentData = JSON.stringify(orderData, null, 2)
         // Show a success message within this page, e.g.
+
         const element = document.getElementById('paypal-button-container');
         element.innerHTML = '';
         element.innerHTML = '<h3>Thank you for your payment!</h3>';
         
-        let makeBooking_URL = "http://localhost:5100/make_booking";
-        fetch(makeBooking_URL,
-        {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    "id": id,
-                    "status": status,
+        localStorage.setItem("paymentData", paymentData);
+        
 
-                })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            code = data.code;
-            console.log(code);
-            if (code == 500) {
-                valiTxt.innerHTML = "Payment Not Successful.";
-                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            } else if (code == 400) {
-                valiTxt.innerHTML = "Payment Existed.";
-                setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-            }else{
-                window.location.href = "./payment.html";
-            }
-        })
-        .catch(error => {
-            console.log("Problem in making a booking. " + error);
-        })
+        // let makeBooking_URL = "http://localhost:5100/make_booking";
+        // fetch(makeBooking_URL,
+        // {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-type": "application/json"
+        //     },
+        //     body: JSON.stringify(
+        //         {
+        //             "id": id,
+        //             "status": status,
+
+        //         })
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log(data);
+        //     result = data.data;
+        //     console.log(result);
+        // })
+        // .catch(error => {
+        //     console.log("Problem in making a booking. " + error);
+        // })
 
         });
     },
@@ -232,61 +228,6 @@ function onSignIn(googleUser) {
         console.log(err);
     }
     }).render('#paypal-button-container');
-
-
-// function confirmBooking() {
-//     let makeBooking_URL = "http://localhost:5100/make_booking";
-//     fetch(makeBooking_URL,
-//         {
-//             method: "POST",
-//             headers: {
-//                 "Content-type": "application/json"
-//             },
-//             body: JSON.stringify(
-//                 {
-//                     "flightNumber": flightNumber,
-//                     "departureTime": departTime,
-//                     "arrivalTime": arriveTime,
-//                     "departureCity": originCode,
-//                     "arrivalCity": desCode,
-//                     "departureDate": departDate,
-//                     "flightNumber2": flightNumber2,
-//                     "departureTime2": departTime2,
-//                     "arrivalTime2": arriveTime2,
-//                     "departureCity2": originCode2,
-//                     "arrivalCity2": desCode2,
-//                     "departureDate2": departDate2,
-//                     "price": price,
-//                     "lastname": lastName,
-//                     "firstname": firstName,
-//                     "gender": gender,
-//                     "nationality": nationality,
-//                     "dob": dob,
-//                     "passport": passport,
-//                     "email": email,
-//                     "phone": phone,
-
-//                 })
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data);
-//             code = data.code;
-//             console.log(code);
-//             if (code == 500) {
-//                 valiTxt.innerHTML = "Booking Not Successful.";
-//                 setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-//             } else if (code == 400) {
-//                 valiTxt.innerHTML = "Booking Existed.";
-//                 setTimeout(() => { valiTxt.innerHTML = "" }, 2000);
-//             }else{
-//                 window.location.href = "./payment.html";
-//             }
-//         })
-//         .catch(error => {
-//             console.log("Problem in making a booking. " + error);
-//         })
-// }
 
 
 </script>
