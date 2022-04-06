@@ -1,5 +1,4 @@
 function bookReturnFlight(returnCount){
-
       let fromFlightNumber = document.getElementById(`flightNumber${returnCount}`).textContent;
       let fromDepartTime = document.getElementById(`departTime${returnCount}`).textContent;
       let fromArriveTime = document.getElementById(`arriveTime${returnCount}`).textContent;
