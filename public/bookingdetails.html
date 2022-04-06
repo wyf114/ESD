@@ -25,8 +25,7 @@
     <meta name="google-signin-client_id"
         content="648525575446-vn5s4huqmidti2blbgbg0emnb0ml7887.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <!-- js file -->
-    <!-- <script src="js/mybookingprocess.js"></script> -->
+    
 </head>
 
 <body onload="retrieveBooking()">
@@ -50,7 +49,7 @@
                                     <a class="nav-link" href="./index.html">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="mybooking.html">My booking</a>
+                                    <a class="nav-link" href="mybooking.html">My booking</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Contact Us</a>
@@ -86,7 +85,10 @@
                 </div>
 
                 <div class="webnots-tip webnots-notification-box">
-                    Your Booking Details - [booking id here]
+                    <h3><strong>Thank you for your payment!</strong></h3>
+                    <div></div>
+                    <div></div>
+                    Below are your flight details
                 </div>
 
                 <table class="styled-table" style="width:100%">
@@ -99,23 +101,23 @@
                     </thead>
                     <tbody>
                         <tr class="active-row">
-                            <td>1. Singapore to London</td>
+                            <td>1. <span id="originCode">SIN</span> to <span id="desCode">BKK</span></td>
                         </tr>
 
                         <tr>
-                            <td>Flight Number: AR425</td>
-                            <td>SIN 10:35</td>
-                            <td>LHR 14:55</td>
+                            <td id="flightNumber">SQ706</td>
+                            <td id="departTime">SIN 07:10</td>
+                            <td id="arriveTime"> BKK 08:35</td>
                         </tr>
 
                         <tr class="active-row">
-                            <td>2. London to Singapore</td>
+                            <td>2. <span id="originCode2">Singapore</span> to <span id="desCode2">London</span></td>
                         </tr>
 
                         <tr>
-                            <td>Flight Number: AR425</td>
-                            <td>SIN 10:35</td>
-                            <td>LHR 14:55</td>
+                            <td id="flightNumber2">SQ705</td>
+                            <td id="departTime2">BKK 09:40</td>
+                            <td id="arriveTime2">SIN 13:05</td>
                         </tr>
 
                     </tbody>
@@ -166,81 +168,28 @@
         }
 
         // booking history
-        function retriveBooking() {
-            let email = localStorage.getItem('email');
-            console.log("email", email)
-            const get_all_bookings_URL = "http://localhost:5001/booking";
-            const response =
-                fetch(`${get_all_bookings_URL}/${email}`)
-                    .then(response => response.json())
-                    .then(data => {
+        // function retrieveBooking() {
+        //     let fromFlightInfo = localStorage.getItem("fromFlightInfo").split(",");
+        //     let toFlightInfo = localStorage.getItem("toFlightInfo").split(",");
 
-                        console.log(data);
-                        if (data.code === 404) {
-                            // no booking in db
-                            document.getElementById('message').innerText = 'No Past Booking'
-                            booking = [];
-                        } else {
-                            booking_obj = data.data.bookings;
-                            console.log("data", data);
-                            console.log("booking", booking_obj);
+        //     console.log(localStorage.getItem("fromFlightInfo").split(","));
+        //     console.log(localStorage.getItem("toFlightInfo").split(","));
+        //     // console.log(fromFlightInfo[4])
+        //     document.getElementById("flightNumber").innerHTML = fromFlightInfo[0];
+        //     document.getElementById("departTime").innerHTML = fromFlightInfo[5] + " " + fromFlightInfo[1];
+        //     document.getElementById("arriveTime").innerHTML = fromFlightInfo[5] + " " + fromFlightInfo[2] ;
+        //     document.getElementById("originCode").innerHTML = fromFlightInfo[3];
+        //     document.getElementById("desCode").innerHTML = fromFlightInfo[4];
+        //     document.getElementById("departDate").innerHTML = fromFlightInfo[5];
 
-                        }
 
-                        let info = document.getElementById("info");
-                        var str = '';
-                        for (let i = 0; i < booking_obj.length; i++) {
-                            str += `<div class="col-sm">`
-                            let lastname = booking_obj[i].lastname
-                            let firstname = booking_obj[i].lastname
-                            let passport = booking_obj[i].passport
-                            let email = booking_obj[i].email
-                            let phone = booking_obj[i].phone
-                            let flightNumber = booking_obj[i].flightNumber
-                            let departureDate = booking_obj[i].departureDate
-                            let departureCity = booking_obj[i].departureCity
-                            let arrivalCity = booking_obj[i].arrivalCity
-                            let departureTime = booking_obj[i].departureTime
-                            let arrivalTime = booking_obj[i].arrivalTime
-                            let flightNumber2 = booking_obj[i].flightNumber2
-                            let departureDate2 = booking_obj[i].departureDate2
-                            let departureCity2 = booking_obj[i].departureCity2
-                            let arrivalCity2 = booking_obj[i].arrivalCity2
-                            let departureTime2 = booking_obj[i].departureTime2
-                            let arrivalTime2 = booking_obj[i].arrivalTime2
-                            let price = booking_obj[i].price
-                            // let flightClass = booking_obj[i].flightClass         
-
-                            str += `<p>Booking ${i + 1}</p>
-                    <p>Last Name: ${lastname}</p>
-                    <p>First Name: ${firstname}</p>
-                    <p>Passport: ${passport}</p>
-                    <p>Email: ${email}</p>
-                    <p>Phone: ${phone}</p>
-                    <p>Flight Number: ${flightNumber}</p>
-                    <p>Departure Date: ${departureDate}</p>
-                    <p>Departure City: ${departureCity}</p>
-                    <p>Arrival City: ${arrivalCity}</p>
-                    <p>Departure Time: ${departureTime}</p>
-                    <p>Arrival Time: ${arrivalTime}</p></br>
-                    <p>Return Flight: </p>
-                    <p>Flight Number: ${flightNumber2}</p>
-                    <p>Departure Date: ${departureDate2}</p>
-                    <p>Departure City: ${departureCity2}</p>
-                    <p>Arrival City: ${arrivalCity2}</p>
-                    <p>Departure Time: ${departureTime2}</p>
-                    <p>Arrival Time: ${arrivalTime2}</p>
-                </div>`
-                            info.innerHTML = str;
-                        }
-                    })
-
-                    .catch(error => {
-                        // Errors when calling the service; such as network error, 
-                        // service offline, etc
-                        console.log(error);
-                    })
-        }
+        //     document.getElementById("flightNumber2").innerHTML = toFlightInfo[0];
+        //     document.getElementById("departTime2").innerHTML = toFlightInfo[1];
+        //     document.getElementById("arriveTime2").innerHTML = toFlightInfo[2];
+        //     document.getElementById("originCode2").innerHTML = toFlightInfo[3];
+        //     document.getElementById("desCode2").innerHTML = toFlightInfo[4];
+        //     document.getElementById("departDate2").innerHTML = toFlightInfo[5];
+        // }
 
     </script>
 
