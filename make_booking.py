@@ -79,6 +79,8 @@ def processMemberBooking(booking):
     # Check the booking result; if a failure, send it to the error microservice.
     code = create_booking["code"]
 
+    amqp_setup.check_setup()
+
     if code not in range(200, 300):
         # Inform the error microservice
         print('\n\n-----Publishing the (booking error) message with routing_key=booking.error-----')
@@ -96,17 +98,31 @@ def processMemberBooking(booking):
             },
             "message": message
         }
+    else:
+        # 4. Record new booking
+        # record the activity log anyway
+        print('\n\n-----Publishing the (booking info) message with routing_key=booking.info-----')        
+
+        # invoke_http(activity_log_URL, method="POST", json=order_result)            
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.info", 
+            body=message)
+
 
     # add passenger info into passenger db if not exist 
-    updatePassengerInfo(booking)
+    update_passenger = updatePassengerInfo(booking)
+    message_update = json.dumps(update_passenger)
 
     # Return created booking record
     return {
         "code": code,
         "data": {
-            "create_booking": create_booking
+            "create_booking": create_booking,
+            "update_passenger": update_passenger,
         },
-        "message": "Booking record has been created."
+        "message": {
+            "create_booking":"Booking record has been created.",
+            "update_passenger": message_update
+        }
     }
 
 
@@ -203,8 +219,6 @@ def processPayment(booking):
             },
             "message": "Booking update record error sent for error handling."
         }
-
-
 
 
 
