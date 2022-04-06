@@ -49,19 +49,37 @@ def validateBooking(payment_info):
             code = code
             message = 'Success in booking status update.'
 
+        return {
+            "code": code,
+            "data": {
+                "updateBooking": updateBooking
+            },
+            "message": "Payment successful."
+        }   
+
+    else:
+        payment_info['paymentStatus'] = "Cancelled"
+        print(payment_info)
+        updateBooking = invoke_http(booking_URL + "/" + bookingId, method='PUT', json=payment_info)
+        code = updateBooking["code"]
+        print(code)
+        if code not in range(200, 300):
+            code = code
+            message = 'Failure in booking status update.'
+        else:  
+            code = code
+            message = 'Success in booking status update.'
+
         print(message)
         print()  
-    else:
-        code = 500
-        message = "Payment failed."
 
-    return {
-        'code': code,
-        'data': {
-            'bookingId': bookingId
-        },
-        'message': message
-    }
+        return {
+            "code": code,
+            "data": {
+                "updateBooking": updateBooking
+            },
+            "message": "Payment failed and your flight is cancelled."
+        }   
 
 
 # execute this program only if it is run as a script (not by 'import')
