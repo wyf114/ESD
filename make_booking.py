@@ -107,6 +107,9 @@ def processMemberBooking(booking):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.info", 
             body=message)
 
+        countDown = {}
+        countDown.update({"bookingId": bookingId, "countDown": "Countdown", "bookingStatus": "Cancelled"})
+        invoke_http(validation_URL, method='POST', json=countDown)
         # add passenger info into passenger db if not exist 
         update_passenger = addPassengerInfo(booking)
         message_update = json.dumps(update_passenger)

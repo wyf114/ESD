@@ -138,11 +138,11 @@ def find_by_condition(condition):
     else:
         booking = Booking.query.filter_by(bookingId=condition).first()
         if booking:
-            # booking = json.dumps(booking, default=str)
+            booking = json.dumps(booking, default=str)
             return jsonify(
                 {
                     "code": 200,
-                    "data": booking.json()
+                    "data": booking
                 }
             )
         return jsonify(
@@ -215,11 +215,11 @@ def update_booking(bookingId):
             }
         ), 502
     
-    # booking = json.dumps(booking, default=str)
+    booking = json.dumps(booking, default=str)
     return jsonify(
         {
             "code": 202,
-            "data": booking.json()
+            "data": booking
         }
     ), 202
 
