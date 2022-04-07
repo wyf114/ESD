@@ -1,9 +1,4 @@
 import pika
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-app = Flask(__name__)
-CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
-                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
 from os import environ ###
 
 # These module-level variables are initialized whenever a new instance of python interpreter imports the module;

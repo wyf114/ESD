@@ -1,11 +1,7 @@
 import json
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import amqp_setup
-app = Flask(__name__)
-CORS(app, allow_headers=['Content-Type', 'Access-Control-Allow-Origin',
-                         'Access-Control-Allow-Headers', 'Access-Control-Allow-Methods'])
+
 monitorBindingKey='*.error'
 
 def receiveError():

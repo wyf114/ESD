@@ -92,7 +92,7 @@ function confirmBooking() {
     let nationality = document.getElementById("nationality").value;
     let dob = document.getElementById("dob").value;
     let passport = document.getElementById("passport").value;
-    let email = document.getElementById("emailTxt").textContent;
+    let email = localStorage.getItem('email');
     console.log(email);
     let phone = document.getElementById("phone").value;
     let genderList = document.getElementsByName("gender");

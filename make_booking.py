@@ -107,10 +107,9 @@ def processMemberBooking(booking):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="booking.info", 
             body=message)
 
-
-    # add passenger info into passenger db if not exist 
-    update_passenger = addPassengerInfo(booking)
-    message_update = json.dumps(update_passenger)
+        # add passenger info into passenger db if not exist 
+        update_passenger = addPassengerInfo(booking)
+        message_update = json.dumps(update_passenger)
 
     # Return created booking record
     return {
@@ -133,63 +132,34 @@ def addPassengerInfo(booking):
     passenger_info.update({ "passport": booking["passport"], "lastname": booking["lastname"], "firstname": booking["firstname"], 
     "dob": booking["dob"], "gender": booking["gender"], "nationality": booking["nationality"], "phone":booking["phone"]})
     
-    check_passenger = invoke_http(passenger_URL + "/" + email, method='GET')
-    code = check_passenger["code"]
-
-    # if no passenger found or error
-    if code not in range(200, 300):
         # if no data found in the passenger db, save the new passenger data into db
-        if code == 404:
-            add_passenger = invoke_http(passenger_URL + "/" + email, method='POST', json=passenger_info)
+    add_passenger = invoke_http(passenger_URL + "/" + email, method='POST', json=passenger_info)
+    code = add_passenger['code']
             
-            # if error
-            if add_passenger["code"] not in range(200, 300):
-                # Inform the error microservice
-                print('\n\n-----Publishing the (add passenger error) message with routing_key=addPassenger.error-----')
-                message = json.dumps(add_passenger)
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="addPassenger.error", 
-                    body=message, properties=pika.BasicProperties(delivery_mode = 2))
-                print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), add_passenger)
-                # Return error
-                return {
-                    "code": add_passenger["code"],
-                    "data": {
-                        "add_passenger": add_passenger
-                    },
-                    "message": message
-                    }
-            # Return created passenger record
-            return {
-                "code": add_passenger["code"],
-                "data": {
-                    "add_passenger": add_passenger
-                },
-                "message": "New passenger record has been created."
+    # if error
+    if code not in range(200, 300):
+        # Inform the error microservice
+        print('\n\n-----Publishing the (add passenger error) message with routing_key=addPassenger.error-----')
+        message = json.dumps(add_passenger)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="addPassenger.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2))
+        print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), add_passenger)
+        # Return error
+        return {
+            "code": add_passenger["code"],
+            "data": {
+                "add_passenger": add_passenger
+            },
+            "message": message
             }
-        else:
-            # Inform the error microservice
-            print('\n\n-----Publishing the (Passenger error) message with routing_key=passenger.error-----')
-            message = json.dumps(check_passenger)
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="passenger.error", 
-                body=message, properties=pika.BasicProperties(delivery_mode = 2))
-            print("\nadd_passenger status ({:d}) published to the RabbitMQ Exchange:".format(code), check_passenger)
-            # Return error
-            return {
-                "code": code,
-                "data": {
-                    "check_passenger": check_passenger
-                },
-                "message": message
-                }
-
-    # Return checking record
+    # Return created passenger record
     return {
-        "code": code,
+        "code": add_passenger["code"],
         "data": {
-            "check_passenger": check_passenger
+            "add_passenger": add_passenger
         },
-        "message": "Passenger record exists."
-    }   
+        "message": "New passenger record has been created."
+            }
 
 
 def processPayment(booking):
